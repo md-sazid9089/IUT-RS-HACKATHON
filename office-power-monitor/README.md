@@ -59,12 +59,12 @@ npm start
 
 Commands:
 
-| Command | Description |
-|---------|-------------|
-| `!status` | Overall office snapshot |
-| `!room <id-or-name>` | Detailed room view |
-| `!usage` | Instantaneous W + today's kWh |
-| `!help` | List all commands |
+| Command              | Description                   |
+| -------------------- | ----------------------------- |
+| `!status`            | Overall office snapshot       |
+| `!room <id-or-name>` | Detailed room view            |
+| `!usage`             | Instantaneous W + today's kWh |
+| `!help`              | List all commands             |
 
 With `ALERT_CHANNEL_IDS` set, newly opened backend alerts are relayed to those Discord channels in real time.
 
@@ -87,14 +87,14 @@ Real-hardware deployment guide: [docs/HARDWARE.md](docs/HARDWARE.md).
 
 ## Tech stack
 
-| Layer | Tech |
-|-------|------|
-| Backend | Node.js, Express, Socket.IO |
-| Simulator | Plain JS (dependency-injectable clock/RNG) |
-| Frontend | React 18, Vite 5, Tailwind CSS 3, Framer Motion 11 |
-| Discord | discord.js v14, socket.io-client, optional OpenAI Chat Completions |
-| Storage | In-memory (single-process, spec-compliant) |
-| Language | JavaScript |
+| Layer     | Tech                                                               |
+| --------- | ------------------------------------------------------------------ |
+| Backend   | Node.js, Express, Socket.IO                                        |
+| Simulator | Plain JS (dependency-injectable clock/RNG)                         |
+| Frontend  | React 18, Vite 5, Tailwind CSS 3, Framer Motion 11                 |
+| Discord   | discord.js v14, socket.io-client, optional OpenAI Chat Completions |
+| Storage   | In-memory (single-process, spec-compliant)                         |
+| Language  | JavaScript                                                         |
 
 ## Configuration
 
@@ -116,4 +116,3 @@ Every service is env-driven. See:
 ## License
 
 MIT.
-
