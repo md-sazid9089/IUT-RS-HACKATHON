@@ -3,6 +3,7 @@ import SummaryCards from './components/SummaryCards.jsx';
 import RoomCard from './components/RoomCard.jsx';
 import PowerBreakdown from './components/PowerBreakdown.jsx';
 import IncidentPanel from './components/IncidentPanel.jsx';
+import OfficeLayout from './components/OfficeLayout.jsx';
 import { useLiveData } from './hooks/useLiveData.js';
 
 /**
@@ -14,7 +15,7 @@ import { useLiveData } from './hooks/useLiveData.js';
  * room grid.
  */
 export default function App() {
-  const { connected, rooms, usage, alerts, incidents } = useLiveData();
+  const { connected, devices, rooms, usage, alerts, incidents } = useLiveData();
 
   return (
     <div className="min-h-screen bg-radial-fade">
@@ -30,6 +31,8 @@ export default function App() {
                 <RoomCard key={room.id} room={room} delay={idx * 0.05} />
               ))}
             </section>
+
+            <OfficeLayout devices={devices} rooms={rooms} />
 
             <PowerBreakdown usage={usage} rooms={rooms} />
           </main>
