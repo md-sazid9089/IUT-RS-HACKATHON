@@ -67,9 +67,42 @@ function highestConsumingRoom(devices) {
   return { roomId, watts };
 }
 
+/**
+ * @param {Device[]} devices
+ * @returns {Record<string, number>} Device id → watts.
+ */
+function powerByDevice(devices) {
+  const out = {};
+  for (const d of devices) {
+    if (d.status === 'on') {
+      out[d.id] = d.power;
+    }
+  }
+  return out;
+}
+
+/**
+ * @param {Device[]} devices
+ * @returns {Device[]}
+ */
+function activeDevices(devices) {
+  return devices.filter(d => d.status === 'on');
+}
+
+/**
+ * @param {Device[]} devices
+ * @returns {number}
+ */
+function inactiveDevicesCount(devices) {
+  return devices.filter(d => d.status === 'off').length;
+}
+
 module.exports = {
   totalPower,
   powerByRoom,
   powerByType,
-  highestConsumingRoom
+  highestConsumingRoom,
+  powerByDevice,
+  activeDevices,
+  inactiveDevicesCount
 };
