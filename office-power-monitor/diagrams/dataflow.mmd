@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant SIM as Simulator
+    participant DS as DeviceStore
+    participant ES as EnergyStore
+    participant SB as SocketBroadcaster
+    participant FE as Frontend (React)
+
+    loop Every 5 seconds
+        SIM->>DS: applyBatch(statusUpdates)
+        DS->>DS: update in-memory state
+        DS-->>SB: emit devices:changed
+        SIM->>ES: record(totalWatts)
+        ES->>ES: integrate energy (trapezoidal)
+        SB->>FE: socket.emit("devices:update", snapshot)
+        SB->>FE: socket.emit("usage:update", {powerWatts, energyWh})
+    end
+
+    Note over FE: React state updates → re-render

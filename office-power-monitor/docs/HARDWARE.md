@@ -1,10 +1,10 @@
 # Hardware Documentation
 
 > **Note:** The reference implementation ships with a **software simulator**.
-> This document describes how the exact same backend + dashboard + Discord
-> bot would talk to real hardware in a production deployment. Nothing in
-> the frontend, REST API, Socket.IO layer, or Discord bot needs to change —
-> only the `simulator/` module is swapped for a hardware bridge.
+> This document describes how the exact same backend + dashboard + Discord bot
+> would talk to real hardware in a production deployment. Nothing in the
+> frontend, REST API, Socket.IO layer, or Discord bot needs to change — only the
+> `simulator/` module is swapped for a hardware bridge.
 
 ---
 
@@ -18,15 +18,15 @@
 |   1 | 5V/2A PSU                                          | Powers the ESP32                        | —                                          |
 |   1 | Wi-Fi AP with 2.4 GHz                              | Network for all IoT nodes               | Isolated VLAN recommended                  |
 
-**Total for the office (3 rooms):** 15 smart relays with metering, 3
-optional ESP32 aggregators.
+**Total for the office (3 rooms):** 15 smart relays with metering, 3 optional
+ESP32 aggregators.
 
 ---
 
 ## 2. Reference Wiring
 
-Each fan / light is wired _through_ a smart metering relay in series with
-its existing switch:
+Each fan / light is wired _through_ a smart metering relay in series with its
+existing switch:
 
 ```
         Live ─┬───────────┐
@@ -84,13 +84,13 @@ Example MQTT payloads:
 ## 4. Backend Bridge (replaces the simulator)
 
 The backend exposes a tiny contract: **anything that calls
-`deviceStore.applyBatch([...])` at a reasonable cadence works**. A
-production `HardwareBridge` therefore lives in `backend/src/hardware/`
-(added on deployment) and looks like this:
+`deviceStore.applyBatch([...])` at a reasonable cadence works**. A production
+`HardwareBridge` therefore lives in `backend/src/hardware/` (added on
+deployment) and looks like this:
 
 ```js
 // backend/src/hardware/mqttBridge.js  (deployment-only)
-const mqtt = require("mqtt");
+const mqtt = require('mqtt');
 
 class MqttBridge {
   constructor({ deviceStore, url, username, password }) {
@@ -98,14 +98,14 @@ class MqttBridge {
     this._client = mqtt.connect(url, { username, password });
   }
   start() {
-    this._client.on("connect", () => {
-      this._client.subscribe("office/+/+/state");
-      this._client.subscribe("office/+/+/telemetry");
+    this._client.on('connect', () => {
+      this._client.subscribe('office/+/+/state');
+      this._client.subscribe('office/+/+/telemetry');
     });
-    this._client.on("message", (topic, buf) => {
-      const [, , deviceId, kind] = topic.split("/");
+    this._client.on('message', (topic, buf) => {
+      const [, , deviceId, kind] = topic.split('/');
       const payload = JSON.parse(buf.toString());
-      if (kind === "state") {
+      if (kind === 'state') {
         this._store.applyBatch([{ id: deviceId, status: payload.status }]);
       }
       // telemetry payloads can update measured `power` field similarly
@@ -115,10 +115,10 @@ class MqttBridge {
 ```
 
 Swap the `Simulator` instantiation in `backend/src/server.js` for
-`new MqttBridge({ deviceStore, url: process.env.MQTT_URL, ... })` and the
-rest of the system (alerts, incidents, REST, Socket.IO, Discord) keeps
-working unchanged. **This is by design — the simulator was built to the
-same interface hardware would use.**
+`new MqttBridge({ deviceStore, url: process.env.MQTT_URL, ... })` and the rest
+of the system (alerts, incidents, REST, Socket.IO, Discord) keeps working
+unchanged. **This is by design — the simulator was built to the same interface
+hardware would use.**
 
 ---
 
@@ -129,12 +129,12 @@ If you rely on metering relays' built-in figures:
 1. Turn one device ON.
 2. Read the reported wattage over a 60-second window.
 3. Compare against a plug-in reference meter (e.g. Kill A Watt).
-4. Apply the correction factor in `backend/src/config/devices.js` by
-   overriding the `wattage` per device id.
+4. Apply the correction factor in `backend/src/config/devices.js` by overriding
+   the `wattage` per device id.
 
-For CT-clamp based setups on an ESP32, calibrate `ICAL` and `VCAL` per
-the [EmonLib](https://github.com/openenergymonitor/EmonLib) instructions
-before publishing to MQTT.
+For CT-clamp based setups on an ESP32, calibrate `ICAL` and `VCAL` per the
+[EmonLib](https://github.com/openenergymonitor/EmonLib) instructions before
+publishing to MQTT.
 
 ---
 

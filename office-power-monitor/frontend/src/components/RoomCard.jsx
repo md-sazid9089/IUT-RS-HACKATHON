@@ -26,9 +26,7 @@ function DeviceChip({ device }) {
             </svg>
           ) : (
             <div
-              className={`h-4 w-4 rounded-full ${
-                on ? 'bg-yellow-300 light-glow' : 'bg-slate-600'
-              }`}
+              className={`h-4 w-4 rounded-full ${on ? 'bg-yellow-300 light-glow' : 'bg-slate-600'}`}
             />
           )}
         </div>
@@ -72,9 +70,7 @@ export default function RoomCard({ room, delay = 0 }) {
             {room.onCount}/{room.totalDevices} on · {formatWatts(room.powerWatts)}
           </p>
         </div>
-        {room.allOn && (
-          <span className="chip border-warn/40 bg-warn/10 text-warn">All ON</span>
-        )}
+        {room.allOn && <span className="chip border-warn/40 bg-warn/10 text-warn">All ON</span>}
       </div>
 
       <div className="relative mt-4 h-2 w-full overflow-hidden rounded-full bg-white/5">

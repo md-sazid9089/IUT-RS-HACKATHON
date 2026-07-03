@@ -36,7 +36,7 @@ function buildUsageSnapshot(deviceStore, energyStore) {
   const perType = powerService.powerByType(devices);
   const highest = powerService.highestConsumingRoom(devices);
   const highestName = highest.roomId
-    ? rooms.find((r) => r.id === highest.roomId)?.name ?? null
+    ? (rooms.find((r) => r.id === highest.roomId)?.name ?? null)
     : null;
   const energy = energyService.snapshot(energyStore);
 

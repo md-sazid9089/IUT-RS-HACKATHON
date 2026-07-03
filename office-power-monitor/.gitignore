@@ -1,6 +1,46 @@
+# ─── Dependencies ───────────────────────────────────────────────────────────────
 node_modules/
-.env
-*.log
-.DS_Store
+
+# ─── Build outputs ─────────────────────────────────────────────────────────────
 dist/
 build/
+.vite/
+frontend/dist/
+
+# ─── Environment files ─────────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+bot/.env
+
+# ─── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+nodemon-debug.log*
+
+# ─── OS artifacts ──────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# ─── Editor / IDE ──────────────────────────────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+
+# ─── Testing / Coverage ────────────────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ─── Misc ──────────────────────────────────────────────────────────────────────
+*.tgz
+.npm

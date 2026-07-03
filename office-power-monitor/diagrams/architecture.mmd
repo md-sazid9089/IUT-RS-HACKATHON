@@ -1,0 +1,36 @@
+graph TD
+    subgraph Backend ["Backend (Node.js · port 4000)"]
+        SIM["Simulator\n(ticks every 5s)"]
+        DS["DeviceStore\n(EventEmitter)"]
+        ES["EnergyStore\n(ring buffer)"]
+        AE["AlertEngine\n(evaluates every 10s)"]
+        AS["AlertStore"]
+        IA["IncidentAggregator"]
+        IS["IncidentStore"]
+        SB["SocketBroadcaster"]
+        API["REST API\n/api/*"]
+    end
+
+    subgraph Frontend ["Frontend (React · port 5173)"]
+        DASH["Dashboard\n(live Socket.IO)"]
+    end
+
+    subgraph Bot ["Discord Bot"]
+        BOT["discord.js\n+ socket.io-client"]
+    end
+
+    SIM -->|"applyBatch()"| DS
+    DS -->|"device:changed"| AE
+    DS -->|"devices:changed"| SB
+    DS -->|"power reading"| ES
+    AE -->|"write"| AS
+    AS -->|"alerts:changed"| IA
+    IA -->|"write"| IS
+    IS -->|"incidents:changed"| SB
+    SB -->|"Socket.IO events"| DASH
+    SB -->|"Socket.IO events"| BOT
+    API -->|"reads"| DS
+    API -->|"reads"| ES
+    API -->|"reads"| AS
+    API -->|"reads"| IS
+    BOT -->|"HTTP fallback"| API

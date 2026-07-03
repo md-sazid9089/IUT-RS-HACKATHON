@@ -98,8 +98,10 @@ class IncidentAggregator extends EventEmitter {
 
   /** @returns {Incident[]} */
   getActive() {
-    return Array.from(this._activeByRoom.values())
-      .map((i) => ({ ...i, alertIds: [...i.alertIds] }));
+    return Array.from(this._activeByRoom.values()).map((i) => ({
+      ...i,
+      alertIds: [...i.alertIds]
+    }));
   }
 
   /**
@@ -150,10 +152,17 @@ class IncidentAggregator extends EventEmitter {
         changed = true;
       } else {
         let mutated = false;
-        if (existing.severity !== severity) { existing.severity = severity; mutated = true; }
-        if (existing.title !== title) { existing.title = title; mutated = true; }
+        if (existing.severity !== severity) {
+          existing.severity = severity;
+          mutated = true;
+        }
+        if (existing.title !== title) {
+          existing.title = title;
+          mutated = true;
+        }
         if (existing.alertIds.join(',') !== alertIds.join(',')) {
-          existing.alertIds = alertIds; mutated = true;
+          existing.alertIds = alertIds;
+          mutated = true;
         }
         if (mutated) {
           existing.updatedAt = iso;
