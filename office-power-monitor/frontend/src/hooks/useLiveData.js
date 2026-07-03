@@ -1,0 +1,42 @@
+import { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+
+/**
+ * Single Socket.IO connection shared across the app. Exposed via a hook
+ * that subscribes to all monitor streams and returns a consolidated
+ * snapshot. The socket sends full snapshots on connect (backend
+ * SocketBroadcaster), so we never need to poll.
+ */
+export function useLiveData() {
+  const [state, setState] = useState({
+    connected: false,
+    devices: [],
+    rooms: [],
+    usage: null,
+    alerts: [],
+    incidents: []
+  });
+
+  useEffect(() => {
+    const socket = io(BACKEND_URL, {
+      transports: ['websocket', 'polling'],
+      reconnection: true
+    });
+
+    const patch = (partial) => setState((s) => ({ ...s, ...partial }));
+
+    socket.on('connect', () => patch({ connected: true }));
+    socket.on('disconnect', () => patch({ connected: false }));
+    socket.on('devices:update', (devices) => patch({ devices }));
+    socket.on('rooms:update', (rooms) => patch({ rooms }));
+    socket.on('usage:update', (usage) => patch({ usage }));
+    socket.on('alerts:update', (alerts) => patch({ alerts }));
+    socket.on('incidents:update', (incidents) => patch({ incidents }));
+
+    return () => socket.close();
+  }, []);
+
+  return state;
+}

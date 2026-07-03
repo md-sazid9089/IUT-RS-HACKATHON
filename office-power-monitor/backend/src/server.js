@@ -2,13 +2,21 @@
 
 const http = require('http');
 const { Server: SocketIOServer } = require('socket.io');
+
 const { createApp } = require('./app');
 const config = require('./config');
 const logger = require('./utils/logger');
 
+const { deviceStore, energyStore } = require('./store');
+const { alertStore, AlertEngine } = require('./alerts');
+const { IncidentAggregator } = require('./incidents');
+const { Simulator } = require('./simulator');
+const { registerRoutes } = require('./routes');
+const { SocketBroadcaster } = require('./sockets');
+
 /**
- * Bootstraps the HTTP server and Socket.IO instance.
- * Feature wiring (store, simulator, alerts, routes, sockets) is added in later modules.
+ * Compose the whole backend: stores → engines → routes → sockets → simulator.
+ * Subscribers are always started BEFORE the simulator so no events are missed.
  */
 function bootstrap() {
   const app = createApp();
@@ -18,12 +26,28 @@ function bootstrap() {
     cors: { origin: config.corsOrigin, methods: ['GET', 'POST'] }
   });
 
-  io.on('connection', (socket) => {
-    logger.info('Socket connected', { id: socket.id });
-    socket.on('disconnect', (reason) => {
-      logger.info('Socket disconnected', { id: socket.id, reason });
-    });
+  const alertEngine = new AlertEngine({ deviceStore, alertStore });
+  const incidentAggregator = new IncidentAggregator({ alertStore });
+  const broadcaster = new SocketBroadcaster({
+    io,
+    deviceStore,
+    energyStore,
+    alertStore,
+    incidentAggregator
   });
+  const simulator = new Simulator({ deviceStore });
+
+  registerRoutes(app, {
+    deviceStore,
+    energyStore,
+    alertStore,
+    incidentAggregator
+  });
+
+  incidentAggregator.start();
+  alertEngine.start();
+  broadcaster.start();
+  simulator.start();
 
   server.listen(config.port, config.host, () => {
     logger.info('Backend listening', { host: config.host, port: config.port });
@@ -31,6 +55,10 @@ function bootstrap() {
 
   const shutdown = (signal) => {
     logger.warn('Shutting down', { signal });
+    simulator.stop();
+    alertEngine.stop();
+    incidentAggregator.stop();
+    broadcaster.stop();
     io.close();
     server.close(() => process.exit(0));
     setTimeout(() => process.exit(1), 5000).unref();

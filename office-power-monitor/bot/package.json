@@ -1,0 +1,15 @@
+{
+  "name": "office-power-monitor-bot",
+  "version": "1.0.0",
+  "description": "Discord bot for the Office Power Monitor. Reads the backend REST API and relays realtime alerts.",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5",
+    "socket.io-client": "^4.7.5"
+  }
+}
