@@ -18,6 +18,7 @@ const { EventEmitter } = require('events');
  * @property {string} createdAt   ISO
  * @property {string} updatedAt   ISO
  * @property {string|null} resolvedAt ISO
+ * @property {boolean} resolved
  */
 
 /**
@@ -110,6 +111,7 @@ class AlertStore extends EventEmitter {
       device,
       message,
       status: 'active',
+      resolved: false,
       createdAt: iso,
       updatedAt: iso,
       resolvedAt: null
@@ -134,6 +136,7 @@ class AlertStore extends EventEmitter {
     for (const [sig, alert] of this._activeBySig.entries()) {
       if (!keepSet.has(sig)) {
         alert.status = 'resolved';
+        alert.resolved = true;
         alert.resolvedAt = iso;
         alert.updatedAt = iso;
         this._activeBySig.delete(sig);
