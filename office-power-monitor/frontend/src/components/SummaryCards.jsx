@@ -7,9 +7,9 @@ import { formatKwh, formatWatts } from '../lib/format.js';
 function StatCard({ label, value, sub, tone = 'accent', delay = 0 }) {
   const toneRing = {
     accent: 'from-accent-400/40 to-purple-500/40',
-    good:   'from-good/40 to-emerald-400/40',
-    warn:   'from-warn/40 to-orange-400/40',
-    bad:    'from-bad/40 to-rose-500/40'
+    good: 'from-good/40 to-emerald-400/40',
+    warn: 'from-warn/40 to-orange-400/40',
+    bad: 'from-bad/40 to-rose-500/40'
   }[tone];
 
   return (
@@ -19,7 +19,9 @@ function StatCard({ label, value, sub, tone = 'accent', delay = 0 }) {
       transition={{ delay, duration: 0.4, ease: 'easeOut' }}
       className="glass p-5"
     >
-      <div className={`absolute -inset-px rounded-2xl bg-gradient-to-br ${toneRing} opacity-30 blur-2xl`} />
+      <div
+        className={`absolute -inset-px rounded-2xl bg-gradient-to-br ${toneRing} opacity-30 blur-2xl`}
+      />
       <div className="relative">
         <div className="stat-label">{label}</div>
         <div className="stat-value mt-2">{value}</div>

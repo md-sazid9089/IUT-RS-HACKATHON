@@ -18,8 +18,18 @@ export default function PowerBreakdown({ usage, rooms }) {
   }));
 
   const typeRows = [
-    { id: 'fan', label: 'Fans', watts: usage.powerByType?.fan || 0, tone: 'from-accent-400 to-purple-500' },
-    { id: 'light', label: 'Lights', watts: usage.powerByType?.light || 0, tone: 'from-warn to-orange-400' }
+    {
+      id: 'fan',
+      label: 'Fans',
+      watts: usage.powerByType?.fan || 0,
+      tone: 'from-accent-400 to-purple-500'
+    },
+    {
+      id: 'light',
+      label: 'Lights',
+      watts: usage.powerByType?.light || 0,
+      tone: 'from-warn to-orange-400'
+    }
   ];
 
   return (
@@ -64,14 +74,9 @@ export default function PowerBreakdown({ usage, rooms }) {
         {typeRows.map((t) => {
           const pct = total > 0 ? Math.round((t.watts / total) * 100) : 0;
           return (
-            <div
-              key={t.id}
-              className="rounded-xl border border-white/10 bg-white/[0.03] p-3"
-            >
+            <div key={t.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
               <div className="text-xs text-slate-400">{t.label}</div>
-              <div className="mt-1 text-xl font-semibold text-white">
-                {formatWatts(t.watts)}
-              </div>
+              <div className="mt-1 text-xl font-semibold text-white">{formatWatts(t.watts)}</div>
               <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/5">
                 <motion.div
                   className={`h-full bg-gradient-to-r ${t.tone}`}

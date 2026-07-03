@@ -2,16 +2,15 @@
 
 ## Guiding principles
 
-- **Single source of truth.** The backend owns `DeviceStore` +
-  `EnergyStore` + `AlertStore`. Dashboard and Discord bot are pure
-  read models.
-- **Feature-based folders.** Each module (`store`, `simulator`,
-  `services`, `alerts`, `incidents`, `routes`, `sockets`) is
-  independently composable and unit-testable.
-- **Dependency injection.** Every engine / router receives its
-  collaborators via its constructor. No hidden globals in features.
-- **Event-driven.** Stores emit events; engines subscribe. This lets us
-  swap the simulator for real hardware with zero changes downstream.
+- **Single source of truth.** The backend owns `DeviceStore` + `EnergyStore` +
+  `AlertStore`. Dashboard and Discord bot are pure read models.
+- **Feature-based folders.** Each module (`store`, `simulator`, `services`,
+  `alerts`, `incidents`, `routes`, `sockets`) is independently composable and
+  unit-testable.
+- **Dependency injection.** Every engine / router receives its collaborators via
+  its constructor. No hidden globals in features.
+- **Event-driven.** Stores emit events; engines subscribe. This lets us swap the
+  simulator for real hardware with zero changes downstream.
 
 ## Layered view
 
@@ -85,5 +84,5 @@ Simulator tick (5s)
 
 ## Swapping the simulator for hardware
 
-See [HARDWARE.md](HARDWARE.md). A production `MqttBridge` calls the
-exact same `deviceStore.applyBatch(...)` API — nothing else changes.
+See [HARDWARE.md](HARDWARE.md). A production `MqttBridge` calls the exact same
+`deviceStore.applyBatch(...)` API — nothing else changes.

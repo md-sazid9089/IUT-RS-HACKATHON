@@ -41,8 +41,7 @@ export default function App() {
         </div>
 
         <footer className="mt-10 text-center text-xs text-slate-500">
-          Office Power Monitor · Realtime IoT telemetry ·{' '}
-          {connected ? 'Connected' : 'Offline'}
+          Office Power Monitor · Realtime IoT telemetry · {connected ? 'Connected' : 'Offline'}
         </footer>
       </div>
     </div>

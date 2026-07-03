@@ -1,0 +1,16 @@
+stateDiagram-v2
+    [*] --> Monitoring : AlertEngine starts
+
+    Monitoring --> AlertRaised : threshold crossed\n(after hours / too long)
+    AlertRaised --> Monitoring : condition clears\n(device turned off)
+
+    AlertRaised --> IncidentOpen : IncidentAggregator\ngroups room alerts
+    IncidentOpen --> IncidentResolved : all room alerts\nclear (room OFF)
+    IncidentResolved --> [*]
+
+    note right of AlertRaised
+        Alert types:
+        • device_on_after_hours (medium)
+        • room_on_after_hours (high)
+        • room_on_too_long (high)
+    end note

@@ -15,19 +15,19 @@ export default function OfficeLayout({ devices, rooms }) {
 
   // Fixed room slots in viewBox coordinates. Order matches config/devices.js.
   const roomSlots = [
-    { id: 'drawing-room', x: 20,  y: 60, w: 260, h: 360, label: 'Drawing Room' },
-    { id: 'work-room-1',  x: 300, y: 60, w: 260, h: 360, label: 'Work Room 1' },
-    { id: 'work-room-2',  x: 580, y: 60, w: 260, h: 360, label: 'Work Room 2' }
+    { id: 'drawing-room', x: 20, y: 60, w: 260, h: 360, label: 'Drawing Room' },
+    { id: 'work-room-1', x: 300, y: 60, w: 260, h: 360, label: 'Work Room 1' },
+    { id: 'work-room-2', x: 580, y: 60, w: 260, h: 360, label: 'Work Room 2' }
   ];
 
   // Positions inside a room for its 3 lights and 2 fans (room-local).
   const lightSlots = [
-    { x: 60,  y: 70 },
+    { x: 60, y: 70 },
     { x: 130, y: 70 },
     { x: 200, y: 70 }
   ];
   const fanSlots = [
-    { x: 90,  y: 210 },
+    { x: 90, y: 210 },
     { x: 170, y: 210 }
   ];
 
@@ -39,9 +39,7 @@ export default function OfficeLayout({ devices, rooms }) {
         <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">
           Office Layout · Top View
         </h3>
-        <div className="text-xs text-slate-400">
-          Fans spin & lights glow when ON
-        </div>
+        <div className="text-xs text-slate-400">Fans spin & lights glow when ON</div>
       </div>
 
       <div className="relative w-full overflow-hidden rounded-xl border border-white/10 bg-ink-900/60">
@@ -141,11 +139,11 @@ export default function OfficeLayout({ devices, rooms }) {
                 {/* Chairs around the table */}
                 {[
                   { cx: -75, cy: 5 },
-                  { cx: 75,  cy: 5 },
+                  { cx: 75, cy: 5 },
                   { cx: -30, cy: -50 },
-                  { cx: 30,  cy: -50 },
+                  { cx: 30, cy: -50 },
                   { cx: -30, cy: 60 },
-                  { cx: 30,  cy: 60 }
+                  { cx: 30, cy: 60 }
                 ].map((c, i) => (
                   <circle
                     key={i}
@@ -236,12 +234,7 @@ export default function OfficeLayout({ devices, rooms }) {
                             transform={`rotate(${angle} ${cx} ${cy})`}
                           />
                         ))}
-                        <circle
-                          cx={cx}
-                          cy={cy}
-                          r="4"
-                          fill={on ? '#38bdf8' : '#64748b'}
-                        />
+                        <circle cx={cx} cy={cy} r="4" fill={on ? '#38bdf8' : '#64748b'} />
                       </motion.g>
                       <text
                         x={cx}
@@ -287,7 +280,9 @@ export default function OfficeLayout({ devices, rooms }) {
         <span className="chip">
           <span className="h-2 w-2 rounded-full bg-slate-500" /> Fan OFF
         </span>
-        <span className="chip border-warn/40 bg-warn/10 text-warn">Room outline turns amber when fully ON</span>
+        <span className="chip border-warn/40 bg-warn/10 text-warn">
+          Room outline turns amber when fully ON
+        </span>
       </div>
     </section>
   );

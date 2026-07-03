@@ -2,8 +2,8 @@
 
 Base URL: `http://localhost:4000`
 
-All responses are JSON. Errors use `{ "error": "<code>" }` with an
-appropriate HTTP status.
+All responses are JSON. Errors use `{ "error": "<code>" }` with an appropriate
+HTTP status.
 
 ---
 
@@ -50,9 +50,7 @@ Single device or `404 device_not_found`.
     {
       "id": "drawing-room",
       "name": "Drawing Room",
-      "devices": [
-        /* Device[] */
-      ],
+      "devices": [/* Device[] */],
       "totalDevices": 5,
       "onCount": 2,
       "offCount": 3,
@@ -100,9 +98,9 @@ Default `all`. Returns `{ "incidents": Incident[] }`.
 
 ## Socket.IO
 
-Connect to `ws://localhost:4000` (`socket.io-client`). On connection the
-server pushes a full snapshot of every stream. Thereafter, updates are
-pushed when state changes.
+Connect to `ws://localhost:4000` (`socket.io-client`). On connection the server
+pushes a full snapshot of every stream. Thereafter, updates are pushed when
+state changes.
 
 | Event              | Payload         |
 | ------------------ | --------------- |

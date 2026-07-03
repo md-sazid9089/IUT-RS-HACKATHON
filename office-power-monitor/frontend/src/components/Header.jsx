@@ -18,20 +18,14 @@ export default function Header({ connected }) {
           </svg>
         </motion.div>
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-white">
-            Office Power Monitor
-          </h1>
-          <p className="text-xs text-slate-400">
-            Realtime energy telemetry · 3 rooms · 15 devices
-          </p>
+          <h1 className="text-xl font-bold tracking-tight text-white">Office Power Monitor</h1>
+          <p className="text-xs text-slate-400">Realtime energy telemetry · 3 rooms · 15 devices</p>
         </div>
       </div>
 
       <div className="chip">
         <span
-          className={`h-2 w-2 rounded-full ${
-            connected ? 'bg-good animate-pulse' : 'bg-bad'
-          }`}
+          className={`h-2 w-2 rounded-full ${connected ? 'bg-good animate-pulse' : 'bg-bad'}`}
         />
         {connected ? 'Live' : 'Reconnecting…'}
       </div>

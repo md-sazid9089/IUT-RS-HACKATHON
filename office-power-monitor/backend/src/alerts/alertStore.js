@@ -86,8 +86,14 @@ class AlertStore extends EventEmitter {
 
     if (existing) {
       let changed = false;
-      if (existing.severity !== severity) { existing.severity = severity; changed = true; }
-      if (existing.message !== message) { existing.message = message; changed = true; }
+      if (existing.severity !== severity) {
+        existing.severity = severity;
+        changed = true;
+      }
+      if (existing.message !== message) {
+        existing.message = message;
+        changed = true;
+      }
       if (changed) {
         existing.updatedAt = iso;
         this.emit('alert:updated', { ...existing });

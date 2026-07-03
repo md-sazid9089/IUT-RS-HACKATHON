@@ -44,13 +44,11 @@ export default function IncidentPanel({ incidents, alerts }) {
                 >
                   <div className="flex items-center justify-between">
                     <div className="text-sm font-semibold">{inc.title}</div>
-                    <span className="text-[10px] uppercase tracking-wider">
-                      {inc.severity}
-                    </span>
+                    <span className="text-[10px] uppercase tracking-wider">{inc.severity}</span>
                   </div>
                   <div className="mt-1 text-[11px] text-slate-300/80">
-                    {inc.alertIds.length} alert{inc.alertIds.length === 1 ? '' : 's'} ·
-                    opened {formatRelative(inc.createdAt)}
+                    {inc.alertIds.length} alert{inc.alertIds.length === 1 ? '' : 's'} · opened{' '}
+                    {formatRelative(inc.createdAt)}
                   </div>
                 </motion.li>
               ))}
@@ -79,19 +77,13 @@ export default function IncidentPanel({ incidents, alerts }) {
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="text-sm text-slate-100">{a.message}</div>
-                    <span
-                      className={`chip shrink-0 ${severityClasses(a.severity)}`}
-                    >
+                    <span className={`chip shrink-0 ${severityClasses(a.severity)}`}>
                       {a.severity}
                     </span>
                   </div>
                   <div className="mt-1 text-[11px] text-slate-500">
                     {a.kind} · {formatRelative(a.updatedAt)} ·{' '}
-                    <span
-                      className={
-                        a.status === 'active' ? 'text-warn' : 'text-good'
-                      }
-                    >
+                    <span className={a.status === 'active' ? 'text-warn' : 'text-good'}>
                       {a.status}
                     </span>
                   </div>

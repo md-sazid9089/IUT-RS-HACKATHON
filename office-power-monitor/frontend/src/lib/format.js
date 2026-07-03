@@ -25,8 +25,11 @@ export function formatRelative(iso, nowMs = Date.now()) {
 
 export function severityClasses(sev) {
   switch (sev) {
-    case 'high':   return 'text-bad border-bad/40 bg-bad/10';
-    case 'medium': return 'text-warn border-warn/40 bg-warn/10';
-    default:       return 'text-good border-good/40 bg-good/10';
+    case 'high':
+      return 'text-bad border-bad/40 bg-bad/10';
+    case 'medium':
+      return 'text-warn border-warn/40 bg-warn/10';
+    default:
+      return 'text-good border-good/40 bg-good/10';
   }
 }
