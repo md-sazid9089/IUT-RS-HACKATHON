@@ -1,144 +1,179 @@
-# Office Power Monitor
+<div align="center">
+  <img src="https://via.placeholder.com/120x120.png?text=OPM" alt="Logo" width="120" height="120">
+  
+  # Office Power Monitor
+  **Real-Time Office Electricity & IoT Management Platform**
 
-Real-time office electricity monitoring — **simulator + backend + dashboard +
-Discord bot**, all sharing one source of truth.
+  [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)](#)
+  [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](#)
+  [![Socket.IO](https://img.shields.io/badge/Socket.IO-4.7-010101?logo=socket.io&logoColor=white)](#)
+  [![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css&logoColor=white)](#)
+  [![Discord.js](https://img.shields.io/badge/Discord.js-14-5865F2?logo=discord&logoColor=white)](#)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](#)
 
-The office has **3 rooms** (Drawing Room, Work Room 1, Work Room 2), each with
-**2 fans (60W)** and **3 lights (15W)** — 15 devices total. A simulator flips
-devices every 5 seconds using realistic biases based on office hours, and
-everything downstream (alerts, incidents, dashboard, Discord bot) reacts in real
-time.
+</div>
 
-## Screenshots
+<br />
 
-- Dark glassmorphic dashboard with summary cards, animated room cards, live
-  power breakdown, and an incident/alert panel.
-- Top-down office layout SVG with **spinning fans** and **glowing lights** wired
-  directly to live device state.
+## 📖 Project Overview
 
-## Repository layout
+The **Office Power Monitor** is an enterprise-grade IoT platform built to track, analyze, and alert on real-time electricity consumption across multiple office rooms. Designed with a **single source of truth**, this monorepo features a live simulator, a highly scalable Node.js/Socket.IO backend, a premium React glassmorphism dashboard, and a fully integrated Discord Bot for chat-ops.
 
+The default configuration simulates an office with **3 rooms** (Drawing Room, Work Room 1, Work Room 2) and **15 devices** (Lights & Fans). The internal physics engine dynamically simulates power draw, respects working hours, calculates instantaneous W and cumulative kWh, and automatically raises incident alerts for anomalous usage.
+
+---
+
+## ✨ Features
+
+- 🔋 **Live Telemetry:** Zero-polling, instantly broadcasted state synchronization using Socket.IO.
+- 🏢 **Interactive Floor Plan:** A beautifully animated SVG office layout where fans physically spin and lights glow when active.
+- 🚨 **Smart Alert Engine:** Automatically detects and escalates anomalies (e.g., lights left ON after hours, rooms ON continuously for >2 hours).
+- 🧠 **Incident Aggregator:** Groups related hardware alerts into deduplicated incidents to prevent dashboard spam.
+- 🤖 **Discord Chat-Ops:** Full command suite (`!status`, `!room`, `!usage`, `!alerts`) wrapped in rich embeds, featuring **OpenAI LLM Response Polishing**.
+- 🔌 **Enterprise Architecture:** Strict separation of concerns (MVC), Dependency Injection, Class-based Service Layers, and Swagger-ready REST APIs.
+
+---
+
+## 📸 Screenshots
+
+> *(Hackathon Note: Replace these placeholders with actual screenshots prior to presentation)*
+
+| Main Dashboard | Interactive Floor Plan | Discord Bot (Embeds & Alerts) |
+| :---: | :---: | :---: |
+| <img src="https://via.placeholder.com/400x250.png?text=Dashboard+UI" alt="Dashboard UI" width="400"> | <img src="https://via.placeholder.com/400x250.png?text=Floor+Plan" alt="Interactive SVG Map" width="400"> | <img src="https://via.placeholder.com/400x250.png?text=Discord+Bot" alt="Discord Integrations" width="400"> |
+
+---
+
+## 🏗️ Architecture & System Diagram
+
+The system operates on an event-driven loop. The underlying stores are the single source of truth. As hardware state mutates, events bubble up through the Service Layer to the REST API, Alert Engine, and SocketBroadcaster simultaneously.
+
+```mermaid
+graph TD
+    %% Hardware/Sim Layer
+    Sim[Simulator Engine / Physical ESP32 Node] -->|Updates State| Store[(In-Memory Device Store)]
+    
+    %% Engine Layer
+    Store -->|devices:changed| AlertEngine[Alert Engine]
+    AlertEngine -->|alerts:changed| Aggregator[Incident Aggregator]
+    
+    %% Service Layer
+    Store --> Service[Service Layer Facade]
+    AlertEngine --> Service
+    Aggregator --> Service
+    
+    %% API Boundaries
+    Service --> REST[Express REST API]
+    Service --> Broadcaster[Socket.IO Broadcaster]
+    
+    %% Clients
+    Broadcaster -->|WebSocket| Web[React Dashboard]
+    Broadcaster -->|WebSocket| BotAlerts[Discord Auto-Alerts]
+    REST -->|HTTP GET| BotCommands[Discord Bot Commands]
 ```
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Backend** | Node.js, Express, Socket.IO, Winston Logger, Swagger-JSDoc |
+| **Frontend** | React 18, Vite 5, Tailwind CSS, Framer Motion, React-Router-DOM |
+| **Discord Bot** | Discord.js v14, Socket.IO-Client, OpenAI API |
+| **Hardware Node** | ESP32, ACS712 Current Sensor, Opto-isolated Relays (Simulated) |
+
+---
+
+## 📂 Folder Structure
+
+```text
 office-power-monitor/
-├── backend/         Node.js + Express + Socket.IO (single source of truth)
-├── frontend/        React + Vite + Tailwind + Framer Motion dashboard
-├── bot/             discord.js bot (+ optional OpenAI polishing)
-├── docs/            HARDWARE.md · ARCHITECTURE.md · API.md
-└── README.md
+├── backend/            # Express REST API, Event Engines, Socket.IO Broadcaster
+│   ├── src/services/   # Class-based Dependency Injection layer
+│   ├── src/routes/     # API Controllers with standardized JSON envelopes
+│   └── src/server.js   # Application bootstrap
+├── frontend/           # React SPA
+│   ├── src/components/ # Reusable UI pieces (Glassmorphism)
+│   ├── src/hooks/      # Real-time state management (useLiveData)
+│   └── src/index.css   # Global styling and Tailwind configurations
+├── bot/                # Discord Bot
+│   ├── src/commands.js # Modular command registry (!status, !alerts)
+│   └── src/llm.js      # OpenAI prompt polishing integration
+├── hardware/           # Hardware reference implementation guides
+└── README.md           # You are here
 ```
 
-## Quick start
+---
 
-Requires Node.js **18+**.
+## 🚀 Setup & Installation
 
-### 1. Backend
+Ensure you have **Node.js 18+** installed. The project is split into three independent services.
 
+### 1. Running the Backend (Core Engine)
+The backend hosts the REST API, the Simulator, and the WebSocket broadcaster.
 ```bash
 cd backend
-cp .env.example .env      # optional; defaults work out of the box
-npm install
-npm start                 # http://localhost:4000
-```
-
-Exposes REST at `/api/*` and Socket.IO on the same port. The simulator starts
-automatically.
-
-### 2. Frontend
-
-```bash
-cd frontend
-cp .env.example .env      # set VITE_BACKEND_URL if backend not on localhost:4000
-npm install
-npm run dev               # http://localhost:5173
-```
-
-The dashboard connects via Socket.IO and updates continuously — **no refresh
-required**.
-
-### 3. Discord bot (optional)
-
-```bash
-cd bot
 cp .env.example .env
-# Fill in DISCORD_TOKEN (required) and ALERT_CHANNEL_IDS + OPENAI_API_KEY (both optional)
 npm install
 npm start
 ```
+> **Backend runs on:** `http://localhost:4000`
 
-Commands:
+### 2. Running the Frontend (Dashboard)
+The React dashboard consumes the live Socket.IO stream.
+```bash
+cd frontend
+cp .env.example .env
+npm install
+npm run dev
+```
+> **Frontend runs on:** `http://localhost:5173`
 
-| Command              | Description                   |
-| -------------------- | ----------------------------- |
-| `!status`            | Overall office snapshot       |
-| `!room <id-or-name>` | Detailed room view            |
-| `!usage`             | Instantaneous W + today's kWh |
-| `!help`              | List all commands             |
+### 3. Running the Discord Bot (Optional)
+The bot provides Chat-Ops and realtime Discord alerts.
+```bash
+cd bot
+cp .env.example .env
+# Important: Open .env and add your DISCORD_TOKEN
+npm install
+npm start
+```
+> **Note:** To enable OpenAI polishing and auto-relays, ensure `OPENAI_API_KEY` and `ALERT_CHANNEL_IDS` are populated in the `.env`.
 
-With `ALERT_CHANNEL_IDS` set, newly opened backend alerts are relayed to those
-Discord channels in real time.
+---
 
-If `OPENAI_API_KEY` is set, responses are polished by the configured model
-(`OPENAI_MODEL`, default `gpt-4o-mini`). **On any LLM failure the bot silently
-falls back to the deterministic template output** — every command is guaranteed
-to reply.
+## 🔌 API Documentation
 
-## What the system does
+The backend adheres to a strict RESTful envelope: `{ success: boolean, data: { ... }, error?: { ... } }`.
 
-- **Simulator** ticks every 5s, respects a 60s minimum dwell time, biases
-  devices ON during 9AM–5PM and OFF outside those hours.
-- **Alert engine** raises three kinds of alerts:
-  1. `device_on_after_hours` — any ON device outside office hours (medium)
-  2. `room_on_after_hours` — every device in a room ON outside hours (high)
-  3. `room_on_too_long` — entire room ON continuously for >2h (high)
-- **Incident aggregator** groups active alerts by room into one open incident
-  per room; auto-resolves when the room clears.
-- **Broadcaster** pushes `devices:update`, `rooms:update`, `usage:update`,
-  `alerts:update`, `incidents:update` over Socket.IO. Every new client receives
-  a full snapshot on connect.
-- **REST API** exposes the same data via `/api/devices`, `/api/rooms`,
-  `/api/usage`, `/api/alerts`, `/api/incidents`.
+- **`GET /api/devices`** - Array of raw device telemetries.
+- **`GET /api/rooms`** - Aggregated summary of power consumption per room.
+- **`GET /api/usage`** - High-level metrics, total Watts, and estimated daily kWh.
+- **`GET /api/alerts?status=active`** - Fetch system warnings and errors.
+- **`GET /api/incidents`** - Fetch deduplicated incident tickets.
 
-Full endpoint reference: [docs/API.md](docs/API.md). System architecture & event
-bus: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Real-hardware deployment
-guide: [docs/HARDWARE.md](docs/HARDWARE.md).
+*(Full API spec can be found internally via Swagger comments on the router controllers).*
 
-## Tech stack
+---
 
-| Layer     | Tech                                                               |
-| --------- | ------------------------------------------------------------------ |
-| Backend   | Node.js, Express, Socket.IO                                        |
-| Simulator | Plain JS (dependency-injectable clock/RNG)                         |
-| Frontend  | React 18, Vite 5, Tailwind CSS 3, Framer Motion 11                 |
-| Discord   | discord.js v14, socket.io-client, optional OpenAI Chat Completions |
-| Storage   | In-memory (single-process, spec-compliant)                         |
-| Language  | JavaScript                                                         |
+## 🔧 Hardware Documentation
 
-## Configuration
+Want to transition from the software simulator to real-world edge devices? 
+We have fully mapped out the **ESP32 + ACS712 + Relay Module** circuitry required to build a physical room node. Because the SaaS architecture is entirely decoupled and event-driven, swapping the virtual simulator for physical HTTP/MQTT payloads requires zero downstream logic changes.
 
-Every service is env-driven. See:
+👉 [View the complete Hardware Design Guide here](hardware/CIRCUIT_DESIGN.md).
 
-- [backend/.env.example](backend/.env.example) — port, CORS origin, simulator
-  cadence, min dwell, office hours, "room on too long" threshold
-- [frontend/.env.example](frontend/.env.example) — `VITE_BACKEND_URL`
-- [bot/.env.example](bot/.env.example) — Discord token, backend URLs, alert
-  channels, OpenAI key/model
+---
 
-## Design principles
+## 🔮 Future Improvements
 
-- **Single source of truth.** All derived views (rooms, usage, alerts,
-  incidents) recompute from the same `DeviceStore`.
-- **Clean architecture / feature folders.** Every backend module lives under
-  `backend/src/{store,simulator,services,alerts,incidents,routes,sockets}` with
-  a barrel export and clear dependencies.
-- **Dependency injection everywhere.** No hidden globals inside features —
-  engines, routers, and the broadcaster take their collaborators through
-  constructors.
-- **Event-driven.** Stores emit; engines and the broadcaster subscribe. Swapping
-  the simulator for an MQTT bridge to real hardware requires zero changes
-  downstream (see [docs/HARDWARE.md](docs/HARDWARE.md)).
-- **JSDoc types** on every public class and function.
-- **Graceful shutdown** across all three services.
+- [ ] **Historical Database:** Migrate from the in-memory Singleton store to PostgreSQL/TimescaleDB for permanent time-series retention.
+- [ ] **User Authentication:** Add JWT-based Auth to the REST API and a login portal to the React frontend.
+- [ ] **MQTT Bridge:** Implement a dedicated MQTT broker (`Mosquitto`) to support direct bidirectional communication with thousands of physical ESP32 nodes simultaneously.
+- [ ] **Hardware Prototyping:** Transition from Wokwi simulation to physical PCB manufacturing for the room nodes.
 
-## License
-
-MIT.
+---
+<div align="center">
+  <i>Built with ❤️ for the Hackathon</i>
+</div>
