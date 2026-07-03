@@ -1,7 +1,7 @@
 'use strict';
 
 const { Router } = require('express');
-const { apiResponse } = require('../middleware/apiResponse');
+const { apiResponse } = require('../utils/apiResponse');
 
 /**
  * @param {Object} deps
