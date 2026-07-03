@@ -1,7 +1,6 @@
 'use strict';
 
 const { io: ioClient } = require('socket.io-client');
-const { EmbedBuilder } = require('discord.js');
 const config = require('./config');
 const { formatAlert } = require('./formatters');
 
@@ -14,7 +13,6 @@ const { formatAlert } = require('./formatters');
  */
 function startAlertRelay(discordClient) {
   if (config.alertChannelIds.length === 0) {
-     
     console.log('[alert-relay] ALERT_CHANNEL_IDS empty — realtime relay disabled.');
     return { stop: () => {} };
   }
@@ -29,15 +27,18 @@ function startAlertRelay(discordClient) {
   let bootstrapped = false;
 
   socket.on('connect', () => {
-     
     console.log('[alert-relay] connected to backend', config.backendWsUrl);
   });
 
   socket.on('alerts:update', async (alerts) => {
-    if (!Array.isArray(alerts)) {return;}
+    if (!Array.isArray(alerts)) {
+      return;
+    }
 
     if (!bootstrapped) {
-      for (const a of alerts) {knownAlertIds.add(a.id);}
+      for (const a of alerts) {
+        knownAlertIds.add(a.id);
+      }
       bootstrapped = true;
       return;
     }
@@ -50,28 +51,25 @@ function startAlertRelay(discordClient) {
         fresh.push(a);
       }
     }
-    if (fresh.length === 0) {return;}
+    if (fresh.length === 0) {
+      return;
+    }
 
     for (const channelId of config.alertChannelIds) {
       let channel;
       try {
         channel = await discordClient.channels.fetch(channelId);
       } catch (err) {
-         
         console.warn(`[alert-relay] channel ${channelId} fetch failed:`, err.message);
         continue;
       }
-      if (!channel?.isTextBased?.()) {continue;}
+      if (!channel?.isTextBased?.()) {
+        continue;
+      }
       for (const alert of fresh) {
         try {
-          const embed = new EmbedBuilder()
-            .setTitle(alert.severity === 'high' ? '🚨 Critical Alert' : alert.severity === 'medium' ? '⚠️ Warning' : 'ℹ️ Notice')
-            .setColor(alert.severity === 'high' ? '#ef4444' : alert.severity === 'medium' ? '#f59e0b' : '#38bdf8')
-            .setDescription(formatAlert(alert))
-            .setTimestamp(new Date(alert.createdAt));
-          await channel.send({ embeds: [embed] });
+          await channel.send(formatAlert(alert));
         } catch (err) {
-           
           console.warn('[alert-relay] send failed:', err.message);
         }
       }
@@ -79,7 +77,6 @@ function startAlertRelay(discordClient) {
   });
 
   socket.on('disconnect', (reason) => {
-     
     console.warn('[alert-relay] disconnected:', reason);
   });
 
