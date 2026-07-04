@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="Segoe UI, Arial, sans-serif" font-size="13">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <style>
+      .state { fill:#eff6ff; stroke:#2563eb; stroke-width:1.6; rx:26; ry:26; }
+      .fire  { fill:#fef2f2; stroke:#b91c1c; stroke-width:1.6; rx:26; ry:26; }
+      .ok    { fill:#ecfdf5; stroke:#047857; stroke-width:1.6; rx:26; ry:26; }
+      .title { font-weight:700; font-size:14px; fill:#0f172a; }
+      .sub   { fill:#475569; font-size:11px; }
+      .edge  { stroke:#334155; stroke-width:1.4; fill:none; }
+      .elbl  { fill:#334155; font-size:11px; }
+    </style>
+  </defs>
+
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">
+    Alert &amp; Incident Lifecycle
+  </text>
+  <text x="450" y="50" text-anchor="middle" class="sub">
+    AlertEngine samples state every 10 s; conditions per spec: after-hours + room-on-&gt;2h continuous
+  </text>
+
+  <rect x="60" y="90" width="200" height="70" class="state"/>
+  <text x="160" y="118" text-anchor="middle" class="title">Idle</text>
+  <text x="160" y="138" text-anchor="middle" class="sub">no active alert for this room</text>
+
+  <rect x="360" y="90" width="220" height="70" class="fire"/>
+  <text x="470" y="118" text-anchor="middle" class="title">Alert Triggered</text>
+  <text x="470" y="138" text-anchor="middle" class="sub">timestamped · pushed to AlertStore</text>
+
+  <rect x="660" y="90" width="200" height="70" class="fire"/>
+  <text x="760" y="118" text-anchor="middle" class="title">Incident Open</text>
+  <text x="760" y="138" text-anchor="middle" class="sub">dedup group in IncidentAggregator</text>
+
+  <rect x="360" y="240" width="220" height="70" class="state"/>
+  <text x="470" y="268" text-anchor="middle" class="title">Broadcast</text>
+  <text x="470" y="288" text-anchor="middle" class="sub">Socket.IO → Dashboard + Discord</text>
+
+  <rect x="660" y="240" width="200" height="70" class="state"/>
+  <text x="760" y="268" text-anchor="middle" class="title">AI Insight (optional)</text>
+  <text x="760" y="288" text-anchor="middle" class="sub">HuggingFace explains cause</text>
+
+  <rect x="360" y="380" width="220" height="70" class="ok"/>
+  <text x="470" y="408" text-anchor="middle" class="title">Resolved</text>
+  <text x="470" y="428" text-anchor="middle" class="sub">condition cleared → incident closed</text>
+
+  <!-- edges -->
+  <path class="edge" d="M260 125 L 360 125" marker-end="url(#a)"/>
+  <text x="310" y="115" text-anchor="middle" class="elbl">condition met</text>
+
+  <path class="edge" d="M580 125 L 660 125" marker-end="url(#a)"/>
+  <text x="620" y="115" text-anchor="middle" class="elbl">aggregate</text>
+
+  <path class="edge" d="M470 160 L 470 240" marker-end="url(#a)"/>
+  <text x="485" y="205" class="elbl">emit alerts:update</text>
+
+  <path class="edge" d="M580 275 L 660 275" marker-end="url(#a)"/>
+  <text x="620" y="265" text-anchor="middle" class="elbl">optional</text>
+
+  <path class="edge" d="M470 310 L 470 380" marker-end="url(#a)"/>
+  <text x="485" y="350" class="elbl">condition cleared</text>
+
+  <path class="edge" d="M360 415 C 200 415, 100 300, 130 160" marker-end="url(#a)"/>
+  <text x="170" y="330" class="elbl">back to Idle</text>
+</svg>

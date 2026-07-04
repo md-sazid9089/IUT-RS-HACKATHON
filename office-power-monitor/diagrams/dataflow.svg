@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="Segoe UI, Arial, sans-serif" font-size="13">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <style>
+      .box   { fill:#ffffff; stroke:#334155; stroke-width:1.5; rx:8; ry:8; }
+      .em    { fill:#eff6ff; stroke:#2563eb; stroke-width:1.5; rx:8; ry:8; }
+      .warn  { fill:#fef2f2; stroke:#b91c1c; stroke-width:1.5; rx:8; ry:8; }
+      .title { font-weight:700; font-size:14px; fill:#0f172a; }
+      .sub   { fill:#475569; font-size:11px; }
+      .edge  { stroke:#334155; stroke-width:1.4; fill:none; }
+      .elbl  { fill:#334155; font-size:11px; }
+      .step  { font-weight:700; fill:#2563eb; }
+    </style>
+  </defs>
+
+  <text x="500" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">
+    Real-time Data Flow — Device state → Dashboard tile + Discord alert
+  </text>
+
+  <!-- Step 1: Simulator -->
+  <rect x="40" y="80" width="200" height="90" class="box"/>
+  <text x="140" y="105" text-anchor="middle"><tspan class="step">1</tspan> <tspan class="title">Simulator tick</tspan></text>
+  <text x="140" y="128" text-anchor="middle" class="sub">Every 5s decides whether</text>
+  <text x="140" y="144" text-anchor="middle" class="sub">a device flips ON/OFF using</text>
+  <text x="140" y="160" text-anchor="middle" class="sub">office-hour probability model</text>
+
+  <!-- Step 2: DeviceStore -->
+  <rect x="290" y="80" width="200" height="90" class="em"/>
+  <text x="390" y="105" text-anchor="middle"><tspan class="step">2</tspan> <tspan class="title">DeviceStore.updateDevice()</tspan></text>
+  <text x="390" y="128" text-anchor="middle" class="sub">writes new status,</text>
+  <text x="390" y="144" text-anchor="middle" class="sub">power draw &amp; lastChanged;</text>
+  <text x="390" y="160" text-anchor="middle" class="sub">emits device:changed</text>
+
+  <!-- Step 3: fan-out -->
+  <rect x="540" y="40" width="200" height="60" class="box"/>
+  <text x="640" y="62" text-anchor="middle"><tspan class="step">3a</tspan> <tspan class="title">EnergyStore</tspan></text>
+  <text x="640" y="80" text-anchor="middle" class="sub">accumulates W → kWh today</text>
+
+  <rect x="540" y="115" width="200" height="60" class="box"/>
+  <text x="640" y="137" text-anchor="middle"><tspan class="step">3b</tspan> <tspan class="title">AlertEngine (every 10s)</tspan></text>
+  <text x="640" y="155" text-anchor="middle" class="sub">after-hours · &gt;2h continuous</text>
+
+  <rect x="540" y="190" width="200" height="60" class="warn"/>
+  <text x="640" y="212" text-anchor="middle"><tspan class="step">3c</tspan> <tspan class="title">AlertStore + Incident</tspan></text>
+  <text x="640" y="230" text-anchor="middle" class="sub">timestamped, deduplicated</text>
+
+  <!-- Step 4: SocketBroadcaster -->
+  <rect x="380" y="290" width="240" height="80" class="em"/>
+  <text x="500" y="315" text-anchor="middle"><tspan class="step">4</tspan> <tspan class="title">SocketBroadcaster</tspan></text>
+  <text x="500" y="335" text-anchor="middle" class="sub">emits devices:update · rooms:update</text>
+  <text x="500" y="352" text-anchor="middle" class="sub">usage:update · alerts:update</text>
+
+  <!-- Step 5a: Dashboard -->
+  <rect x="60" y="410" width="360" height="110" class="box"/>
+  <text x="240" y="435" text-anchor="middle"><tspan class="step">5a</tspan> <tspan class="title">Web Dashboard  (React, :5173)</tspan></text>
+  <text x="240" y="458" text-anchor="middle" class="sub">useLiveData() Socket.IO subscription</text>
+  <text x="240" y="476" text-anchor="middle" class="sub">Device tiles re-render (no refresh)</text>
+  <text x="240" y="494" text-anchor="middle" class="sub">Power meter + alerts panel update live</text>
+
+  <!-- Step 5b: Discord -->
+  <rect x="580" y="410" width="360" height="110" class="box"/>
+  <text x="760" y="435" text-anchor="middle"><tspan class="step">5b</tspan> <tspan class="title">Discord Bot</tspan></text>
+  <text x="760" y="458" text-anchor="middle" class="sub">alertRelay listens on same socket</text>
+  <text x="760" y="476" text-anchor="middle" class="sub">posts embed to ALERT_CHANNEL_IDS</text>
+  <text x="760" y="494" text-anchor="middle" class="sub">users query on demand: !status !room !usage</text>
+
+  <!-- edges -->
+  <path class="edge" d="M240 170 L 290 130" marker-end="url(#a)"/>
+  <path class="edge" d="M490 130 L 540 70" marker-end="url(#a)"/>
+  <path class="edge" d="M490 130 L 540 140" marker-end="url(#a)"/>
+  <path class="edge" d="M640 175 L 640 190" marker-end="url(#a)"/>
+  <path class="edge" d="M640 250 C 640 275, 560 275, 550 290" marker-end="url(#a)"/>
+  <path class="edge" d="M640 100 C 700 200, 620 285, 610 290" marker-end="url(#a)"/>
+  <path class="edge" d="M390 170 C 390 220, 480 270, 480 290" marker-end="url(#a)"/>
+
+  <path class="edge" d="M440 370 C 320 385, 260 400, 240 410" marker-end="url(#a)"/>
+  <text x="330" y="395" class="elbl">Socket.IO</text>
+  <path class="edge" d="M560 370 C 680 385, 740 400, 760 410" marker-end="url(#a)"/>
+  <text x="700" y="395" class="elbl">Socket.IO</text>
+</svg>

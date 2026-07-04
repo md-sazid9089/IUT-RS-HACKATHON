@@ -46,12 +46,33 @@ const commands = [
         return 'Usage: `!room <room-id-or-name>` (try `!status` to list rooms).';
       }
       const query = args.join(' ').trim().toLowerCase();
+      // Normalize aliases: "work1" / "work 1" / "workroom1" → "work-room-1", "drawing" → "drawing-room"
+      const normalized = query.replace(/[\s_-]+/g, '');
+      const aliasMap = {
+        drawing: 'drawing-room',
+        drawingroom: 'drawing-room',
+        work1: 'work-room-1',
+        workroom1: 'work-room-1',
+        w1: 'work-room-1',
+        work2: 'work-room-2',
+        workroom2: 'work-room-2',
+        w2: 'work-room-2'
+      };
+      const targetId = aliasMap[normalized];
       const roomsRes = await apiClient.getRooms();
-      const match = roomsRes.rooms.find(
-        (r) => r.id.toLowerCase() === query || r.name.toLowerCase() === query
-      );
+      const match = roomsRes.rooms.find((r) => {
+        const rid = r.id.toLowerCase();
+        const rname = r.name.toLowerCase();
+        return (
+          rid === query ||
+          rname === query ||
+          rid === targetId ||
+          rid.replace(/[\s_-]+/g, '') === normalized ||
+          rname.replace(/[\s_-]+/g, '') === normalized
+        );
+      });
       if (!match) {
-        return `Room \`${query}\` not found.`;
+        return `Room \`${query}\` not found. Try: \`drawing\`, \`work1\`, or \`work2\`.`;
       }
       const fallback = formatters.formatRoom(match);
       return polish(fallback, `room detail for ${match.name}`);

@@ -2,22 +2,18 @@
 
 System architecture and data-flow diagrams for the Office Power Monitor.
 
+Per the challenge brief, these diagrams are authored as **hand-crafted SVG**
+(not Mermaid). Open the `.svg` files in any browser or embed them directly in
+Markdown.
+
 ## Contents
 
-| File                                       | Description                                             |
-| ------------------------------------------ | ------------------------------------------------------- |
-| [architecture.mmd](architecture.mmd)       | Mermaid — full system architecture                      |
-| [dataflow.mmd](dataflow.mmd)               | Mermaid — real-time data flow (simulator → socket → UI) |
-| [alert-lifecycle.mmd](alert-lifecycle.mmd) | Mermaid — alert / incident state machine                |
+| File | Description |
+| --- | --- |
+| [architecture.svg](architecture.svg) | Full system architecture — shared backend, dashboard, Discord bot |
+| [dataflow.svg](dataflow.svg) | Real-time data flow: simulator → socket → UI + bot |
+| [alert-lifecycle.svg](alert-lifecycle.svg) | Alert / incident state machine |
 
-## Rendering
+The original `.mmd` sources are retained only for reference and are **not** the
+primary deliverable.
 
-These Mermaid source files can be rendered with:
-
-```bash
-# VS Code: install "Mermaid Preview" extension
-# CLI:
-npx -y @mermaid-js/mermaid-cli -i diagrams/architecture.mmd -o diagrams/architecture.svg
-```
-
-Or paste the contents into [mermaid.live](https://mermaid.live).

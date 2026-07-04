@@ -19,13 +19,14 @@ const WATTAGE = Object.freeze({
 });
 
 /**
- * Build the initial device catalog: 2 fans + 3 lights per room.
+ * Build the initial device catalog: 2 fans + 3 lights per room
+ * (per the fixed office spec — 15 devices total across 3 rooms).
  * @returns {Array<{id:string,label:string,type:'fan'|'light',room:string,wattage:number}>}
  */
 function buildDeviceCatalog() {
   const devices = [];
   for (const room of ROOMS) {
-    for (let i = 1; i <= 3; i += 1) {
+    for (let i = 1; i <= 2; i += 1) {
       devices.push({
         id: `${room.id}-fan-${i}`,
         label: `Fan ${i}`,

@@ -21,7 +21,7 @@ This document outlines the hardware architecture required to implement a physica
 
 ## GPIO Mapping (Representative Room)
 
-Each room node controls 6 devices (3 Lights, 3 Fans).
+Each room node controls 5 devices (3 Lights, 2 Fans) per the office spec.
 
 | Component             | ESP32 Pin | Type           | Description                                  |
 | --------------------- | --------- | -------------- | -------------------------------------------- |
@@ -30,7 +30,6 @@ Each room node controls 6 devices (3 Lights, 3 Fans).
 | **Relay 3**           | GPIO 21   | Digital Output | Controls Light 3                             |
 | **Relay 4**           | GPIO 16   | Digital Output | Controls Fan 1                               |
 | **Relay 5**           | GPIO 17   | Digital Output | Controls Fan 2                               |
-| **Relay 6**           | GPIO 22   | Digital Output | Fan 3 relay — standard third fan in the 3-fan room layout |
 | **ACS712 Sensor Out** | GPIO 34   | Analog Input   | Reads total current draw of the room (ADC 1) |
 
 *Note: ADC1 pins (like GPIO 34) are preferred on ESP32 when using WiFi, as ADC2 is consumed by the WiFi driver.*
@@ -61,7 +60,7 @@ This design is fully compatible with **Wokwi** (the online electronics simulator
 
 **To implement in Wokwi:**
 1. Add an `ESP32` board to the workspace.
-2. Add 6 LED components (representing the 220V loads for visual feedback) and connect them to GPIOs 18, 19, 21, 16, 17, and 22 through 330Ω resistors.
+2. Add 5 LED components (representing the 220V loads for visual feedback — 3 lights + 2 fans) and connect them to GPIOs 18, 19, 21, 16, and 17 through 330Ω resistors.
 3. Add a `Slide Potentiometer` connected to GPIO 34. In Wokwi, simulating AC current via an ACS712 is complex. Instead, map the potentiometer's 0-3.3V output directly to a 0-100W variable in the ESP32 code to simulate the total room wattage changing dynamically.
 4. Flash standard Arduino/C++ code utilizing `WiFi.h` and `WebSocketsClient.h`.
 
