@@ -14,6 +14,14 @@
 
 </div>
 
+<div align="center">
+  <h3>
+    ▶️ <a href="https://app.arcade.software/share/videos/KrLwPHW1tuH0982DBw1j">Interactive Arcade Demo</a>
+    &nbsp;|&nbsp;
+    🎥 <a href="https://drive.google.com/file/d/1BOZT1sJ4jq9hta8iV6NTkK2K-Q8vlMMB/view?usp=drive_link">Full Video Presentation</a>
+  </h3>
+</div>
+
 <br />
 
 ## 📖 Project Overview
