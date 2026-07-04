@@ -47,7 +47,8 @@ export default function App() {
     setSimulatedDevices((prev) =>
       prev.map((d) => {
         if (d.id === deviceId) {
-          return { ...d, status: d.status === 'on' ? 'off' : 'on' };
+          const nextStatus = d.status === 'on' ? 'off' : 'on';
+          return { ...d, status: nextStatus, power: nextStatus === 'on' ? d.wattage : 0 };
         }
         return d;
       })
