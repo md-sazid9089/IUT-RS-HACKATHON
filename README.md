@@ -127,19 +127,36 @@ graph TD
 
 ```text
 office-power-monitor/
-├── backend/            # Express REST API, Event Engines, Socket.IO Broadcaster
-│   ├── src/services/   # Class-based Dependency Injection layer
-│   ├── src/routes/     # API Controllers with standardized JSON envelopes
-│   └── src/server.js   # Application bootstrap
-├── frontend/           # React SPA
-│   ├── src/components/ # Reusable UI pieces (Glassmorphism)
-│   ├── src/hooks/      # Real-time state management (useLiveData)
-│   └── src/index.css   # Global styling and Tailwind configurations
-├── bot/                # Discord Bot
-│   ├── src/commands.js # Modular command registry (!status, !alerts)
-│   └── src/llm.js      # OpenAI prompt polishing integration
-├── hardware/           # Hardware reference implementation guides
-└── README.md           # You are here
+├── backend/                         # Express REST API, Event Engines, Socket.IO Broadcaster
+│   ├── src/services/                # Class-based Dependency Injection layer
+│   ├── src/routes/                  # API Controllers with standardized JSON envelopes
+│   └── src/server.js                # Application bootstrap
+├── frontend/                        # React SPA
+│   ├── src/components/              # Reusable UI pieces (Glassmorphism)
+│   ├── src/hooks/                   # Real-time state management (useLiveData)
+│   └── src/index.css                # Global styling and Tailwind configurations
+├── bot/                             # Discord Bot
+│   ├── src/commands.js              # Modular command registry (!status, !alerts)
+│   └── src/llm.js                   # Response polishing / command helpers
+├── hardware/
+│   ├── CIRCUIT_DESIGN.md            # Complete hardware/circuit explanation
+│   └── wokwi/
+│       ├── work-room-1-simulation.ino
+│       ├── diagram.json
+│       ├── wokwi-project.txt
+│       └── README.md
+├── docs/
+│   ├── media/
+│   │   └── demo-end-to-end.gif
+│   ├── system-diagram.png
+│   ├── system-diagram.svg
+│   ├── wokwi-logic-simulation.png
+│   ├── work-room-1-electrical-schematic.png
+│   ├── work-room-1-electrical-schematic.svg
+│   ├── pin-mapping-table.md
+│   ├── circuit-connection-list.md
+│   └── safety-notes.md
+└── README.md                        # You are here
 ```
 
 ---
@@ -201,10 +218,125 @@ The backend adheres to a strict RESTful envelope: `{ success: boolean, data: { .
 
 ---
 
-## 🔧 Hardware Documentation
+## 🔧 Hardware, Circuit Diagram & Wokwi Simulation
 
-Want to transition from the software simulator to real-world edge devices? 
-We have fully mapped out the **ESP32 + ACS712 + Relay Module** circuitry required to build a physical room node. Because the SaaS architecture is entirely decoupled and event-driven, swapping the virtual simulator for physical HTTP/MQTT payloads requires zero downstream logic changes.
+The hackathon does **not** require real physical hardware. This project therefore includes two hardware artifacts:
+
+1. **Wokwi logic-side simulation** — proves the ESP32 control logic and analog current-sensor input.
+2. **Professional electrical schematic** — shows how the same room controller would be wired to real fans/lights through relays, fuse protection, current sensing, neutral return, and protective earth.
+
+The representative circuit focuses on **Work Room 1**:
+
+```text
+Fan 1
+Fan 2
+Light 1
+Light 2
+Light 3
+```
+
+The same room-node design can be repeated for Drawing Room and Work Room 2.
+
+### Hardware Artifact Index
+
+| Artifact | Purpose | Repository Path |
+|---|---|---|
+| Wokwi logic simulation screenshot | Shows the working ESP32 low-voltage simulation | `docs/wokwi-logic-simulation.png` |
+| Wokwi source code | ESP32 firmware used in the Wokwi simulation | `hardware/wokwi/work-room-1-simulation.ino` |
+| Wokwi wiring definition | Wokwi circuit/component layout | `hardware/wokwi/diagram.json` |
+| Wokwi project note/link | Stores the exported project note or public Wokwi URL | `hardware/wokwi/wokwi-project.txt` |
+| Electrical schematic image | Judge-facing professional circuit diagram | `docs/work-room-1-electrical-schematic.png` |
+| Electrical schematic vector | Editable/vector schematic artifact | `docs/work-room-1-electrical-schematic.svg` |
+| Pin mapping | ESP32 GPIO to relay/current-sensor mapping | `docs/pin-mapping-table.md` |
+| Connection list | Wire-by-wire explanation of the circuit | `docs/circuit-connection-list.md` |
+| Hardware design guide | Full circuit explanation and safety notes | `hardware/CIRCUIT_DESIGN.md` |
+
+---
+
+### Wokwi Logic-Side Simulation
+
+The Wokwi simulation demonstrates the **safe low-voltage side** of the hardware design.
+
+It uses:
+
+- ESP32 DevKit
+- 5 LEDs as relay/load indicators
+- Potentiometer as the current-sensor signal stand-in
+- GPIO34 as the analog current-sensor input
+
+| Simulated Device | ESP32 Pin | Wokwi Component |
+|---|---:|---|
+| Fan 1 | GPIO16 | LED |
+| Fan 2 | GPIO17 | LED |
+| Light 1 | GPIO18 | LED |
+| Light 2 | GPIO19 | LED |
+| Light 3 | GPIO21 | LED |
+| Room current sensor | GPIO34 | Potentiometer |
+
+<p align="center">
+  <img src="docs/wokwi-logic-simulation.png" alt="Wokwi logic-side simulation for Work Room 1 ESP32 controller" width="760">
+</p>
+
+> **Important:** Wokwi simulates the controller logic only. LEDs represent relay-controlled fans/lights, and the potentiometer represents the analog output of the current sensor. Real AC mains wiring is shown separately in the electrical schematic.
+
+Project files:
+
+- [`hardware/wokwi/work-room-1-simulation.ino`](hardware/wokwi/work-room-1-simulation.ino)
+- [`hardware/wokwi/diagram.json`](hardware/wokwi/diagram.json)
+- [`hardware/wokwi/README.md`](hardware/wokwi/README.md)
+
+---
+
+### Professional Electrical Schematic
+
+The electrical schematic shows how one real room node would be wired in concept.
+
+<p align="center">
+  <img src="docs/work-room-1-electrical-schematic.png" alt="Professional Work Room 1 electrical schematic with ESP32 relay control and current sensing" width="920">
+</p>
+
+The schematic is divided into three zones:
+
+| Zone | What it contains |
+|---|---|
+| **Low-Voltage Control Side** | ESP32, 5V supply, relay input signals, voltage divider, GPIO34 ADC |
+| **Relay / Isolation Side** | Relay module inputs and isolated relay contacts |
+| **AC Mains + Load Side** | AC input, MCB/fuse, ACS712 current sensor, live bus, neutral bus, PE bus, fans, lights |
+
+### Pin Mapping
+
+| Device / Signal | ESP32 Pin | Relay Channel | Purpose |
+|---|---:|---|---|
+| Fan 1 | GPIO16 | CH1 | Control Fan 1 |
+| Fan 2 | GPIO17 | CH2 | Control Fan 2 |
+| Light 1 | GPIO18 | CH3 | Control Light 1 |
+| Light 2 | GPIO19 | CH4 | Control Light 2 |
+| Light 3 | GPIO21 | CH5 | Control Light 3 |
+| Optional spare | GPIO22 | CH6 | Reserved for 15-vs-18 device-count ambiguity |
+| Room current sensor | GPIO34 | ADC input | Estimate aggregate room current |
+
+### Command Path
+
+```text
+ESP32 GPIO → relay module input → isolated relay contact → AC live switched to fan/light
+```
+
+### Current-Sensing Path
+
+```text
+AC Live → MCB/Fuse → ACS712 current sensor → Protected Live Bus → Relay COM contacts → Relay NO contacts → Loads
+
+ACS712 VOUT → 10kΩ / 20kΩ voltage divider → ESP32 GPIO34 ADC
+```
+
+### Safety Notes
+
+- This is a concept schematic only; it is not a certified installation drawing.
+- Relay contacts switch **AC live only**.
+- Neutral returns directly to the neutral bus and is not switched.
+- Mains neutral is never connected to ESP32 GND.
+- Protective earth is separate from low-voltage ground.
+- Real mains installation would require proper enclosure, rated terminals, fusing/MCB protection, strain relief, and qualified supervision.
 
 👉 [View the complete Hardware Design Guide here](hardware/CIRCUIT_DESIGN.md).
 
