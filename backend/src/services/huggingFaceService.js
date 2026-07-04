@@ -95,7 +95,7 @@ class HuggingFaceService {
 
     return `You are an AI energy analyst for a smart office power monitoring system in Bangladesh.
 
-Office layout: 3 rooms (Drawing Room, Work Room 1, Work Room 2), each with 3 fans (60W each) and 3 lights (15W each). Max room draw: 225W.
+Office layout: 3 rooms (Drawing Room, Work Room 1, Work Room 2), each with 2 fans (60W each) and 3 lights (15W each). Max room draw: 165W.
 
 ANOMALY DETECTED:
 - Room: ${ctx.roomName}
