@@ -1,5 +1,5 @@
 import { useState, useId } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 
 /**
  * Top-down office layout. Draws three rooms side-by-side with walls,
@@ -16,7 +16,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function OfficeLayout({ devices = [], rooms = [], alerts = [] }) {
   const [hoverId, setHoverId] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
   const uid = useId().replace(/:/g, '');
 
   // Fast lookup
@@ -37,12 +38,14 @@ export default function OfficeLayout({ devices = [], rooms = [], alerts = [] }) 
     { x: 130, y: 280 }  // Bottom center
   ];
   const fanSlots = [
-    { x: 130, y: 90 },  // Top center
-    { x: 130, y: 220 }  // Center/Bottom
+    { x: 130, y: 80 },  // Top center
+    { x: 130, y: 160 }, // Center
+    { x: 130, y: 240 }  // Bottom center
   ];
 
   const handleMouseMove = (e) => {
-    setMousePos({ x: e.clientX + 15, y: e.clientY + 15 });
+    mouseX.set(e.clientX + 15);
+    mouseY.set(e.clientY + 15);
   };
 
   const hoverDevice = hoverId ? byId.get(hoverId) : null;
@@ -521,7 +524,7 @@ export default function OfficeLayout({ devices = [], rooms = [], alerts = [] }) 
             exit={{ opacity: 0, scale: 0.88, y: -4 }}
             transition={{ duration: 0.12 }}
             className="pointer-events-none fixed z-50 rounded-lg border border-white/10 bg-slate-900/95 px-3 py-2 text-sm shadow-xl backdrop-blur-md"
-            style={{ left: mousePos.x, top: mousePos.y }}
+            style={{ left: mouseX, top: mouseY }}
           >
             <div className="font-medium text-white">{hoverDevice.label}</div>
             <div className="mt-1 flex items-center gap-2 text-xs">

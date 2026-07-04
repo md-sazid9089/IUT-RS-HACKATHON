@@ -22,7 +22,7 @@ function createRoomsRouter({ deviceStore, predictionEngine }) {
   });
 
   router.get('/:id', (req, res) => {
-    let room = roomService.getRoomSummary(deviceStore, req.params.id);
+    let room = roomService.getRoomSummary(deviceStore, undefined, req.params.id);
     if (!room) {
       return error(res, 'room_not_found', 404);
     }

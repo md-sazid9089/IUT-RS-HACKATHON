@@ -38,6 +38,7 @@ export function useLiveData() {
 
     socket.on('connect', () => patch({ connected: true }));
     socket.on('disconnect', () => patch({ connected: false }));
+    socket.on('snapshot:update', (snapshot) => patch(snapshot));
     socket.on('devices:update', (devices) => patch({ devices }));
     socket.on('rooms:update', (rooms) => patch({ rooms }));
     socket.on('usage:update', (usage) => patch({ usage }));
