@@ -26,10 +26,12 @@ The default configuration simulates an office with **3 rooms** (Drawing Room, Wo
 ## ✨ Features
 
 - 🔋 **Live Telemetry:** Zero-polling, instantly broadcasted state synchronization using Socket.IO.
-- 🏢 **Interactive Floor Plan:** A beautifully animated SVG office layout where fans physically spin and lights glow when active.
+- 🏢 **Interactive Floor Plan & Device Management:** A beautifully animated SVG office layout where fans spin and lights glow. From the dashboard, users can click device chips to **remotely toggle** hardware on and off in real-time.
 - 🚨 **Smart Alert Engine:** Automatically detects and escalates anomalies (e.g., lights left ON after hours, rooms ON continuously for >2 hours).
+- 🧠 **AI Root Cause Analysis:** Integrates with the **Hugging Face Inference API** to automatically generate enterprise-grade, professional root-cause analyses for power anomalies.
+- 📉 **Waste Optimizer & Eco-Mode:** Utilizes a custom Logistic Regression prediction engine to identify empty rooms. If devices are left on in an unoccupied room, the system flags the wasted BDT cost and, after a 5-minute grace period, **automatically shuts down** the offending devices via Eco-Mode.
 - 🧠 **Incident Aggregator:** Groups related hardware alerts into deduplicated incidents to prevent dashboard spam.
-- 🤖 **Discord Chat-Ops:** Full command suite (`!status`, `!room`, `!usage`, `!alerts`) wrapped in rich embeds, featuring **OpenAI LLM Response Polishing**.
+- 🤖 **Discord Chat-Ops:** Full command suite (`!status`, `!room`, `!usage`, `!alerts`) wrapped in rich embeds for chat-based monitoring.
 - 🔌 **Enterprise Architecture:** Strict separation of concerns (MVC), Dependency Injection, Class-based Service Layers, and Swagger-ready REST APIs.
 
 ---
@@ -61,8 +63,7 @@ fires → the Discord bot posts an embed in the channel — all within seconds.
 2. Arrange the screen side-by-side: React dashboard on the left, Discord channel
    on the right.
 3. In the dashboard, open **Demo Controls** and toggle devices in a single room
-   (or `POST /api/demo/force-room` — see [docs/API.md](docs/API.md)) so the room
-   becomes fully ON.
+   (or click the interactive device chips directly).
 4. Fast-forward simulated time past `OFFICE_HOUR_END` (or temporarily set
    `OFFICE_HOUR_END` low in `backend/.env`) so the alert engine trips
    `room_on_after_hours` / `room_on_too_long`.
@@ -79,7 +80,7 @@ fires → the Discord bot posts an embed in the channel — all within seconds.
 
 ## 🏗️ Architecture & System Diagram
 
-The system operates on an event-driven loop. The underlying stores are the single source of truth. As hardware state mutates, events bubble up through the Service Layer to the REST API, Alert Engine, and SocketBroadcaster simultaneously.
+The system operates on an event-driven loop. The underlying stores are the single source of truth. As hardware state mutates, events bubble up through the Service Layer to the REST API, Alert Engine, Eco-Mode Engine, and SocketBroadcaster simultaneously.
 
 ```mermaid
 graph TD
@@ -88,6 +89,8 @@ graph TD
     
     %% Engine Layer
     Store -->|devices:changed| AlertEngine[Alert Engine]
+    Store -->|devices:changed| PredictionEngine[Prediction Engine]
+    PredictionEngine -->|occupancy:changed| EcoMode[Eco-Mode Engine]
     AlertEngine -->|alerts:changed| Aggregator[Incident Aggregator]
     
     %% Service Layer
@@ -98,11 +101,12 @@ graph TD
     %% API Boundaries
     Service --> REST[Express REST API]
     Service --> Broadcaster[Socket.IO Broadcaster]
+    EcoMode -->|eco:action| Broadcaster
     
     %% Clients
     Broadcaster -->|WebSocket| Web[React Dashboard]
     Broadcaster -->|WebSocket| BotAlerts[Discord Auto-Alerts]
-    REST -->|HTTP GET| BotCommands[Discord Bot Commands]
+    REST -->|HTTP GET/POST| BotCommands[Discord Bot Commands]
 ```
 
 ---
@@ -113,7 +117,8 @@ graph TD
 | :--- | :--- |
 | **Backend** | Node.js, Express, Socket.IO, Winston Logger, Swagger-JSDoc |
 | **Frontend** | React 18, Vite 5, Tailwind CSS, Framer Motion, React-Router-DOM |
-| **Discord Bot** | Discord.js v14, Socket.IO-Client, OpenAI API |
+| **AI Integration** | Hugging Face API (`meta-llama/Llama-3.2-3B-Instruct`) |
+| **Discord Bot** | Discord.js v14, Socket.IO-Client |
 | **Hardware Node** | ESP32, ACS712 Current Sensor, Opto-isolated Relays (Simulated) |
 
 ---
