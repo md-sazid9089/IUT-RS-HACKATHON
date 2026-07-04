@@ -1,15 +1,16 @@
 <div align="center">
   <img src="https://via.placeholder.com/120x120.png?text=OPM" alt="Logo" width="120" height="120">
-  
-  # Office Power Monitor
-  **Real-Time Office Electricity & IoT Management Platform**
 
-  [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)](#)
-  [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](#)
-  [![Socket.IO](https://img.shields.io/badge/Socket.IO-4.7-010101?logo=socket.io&logoColor=white)](#)
-  [![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css&logoColor=white)](#)
-  [![Discord.js](https://img.shields.io/badge/Discord.js-14-5865F2?logo=discord&logoColor=white)](#)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](#)
+# Office Power Monitor
+
+**Real-Time Office Electricity & IoT Management Platform**
+
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)](#)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](#)
+[![Socket.IO](https://img.shields.io/badge/Socket.IO-4.7-010101?logo=socket.io&logoColor=white)](#)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css&logoColor=white)](#)
+[![Discord.js](https://img.shields.io/badge/Discord.js-14-5865F2?logo=discord&logoColor=white)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](#)
 
 </div>
 
@@ -17,37 +18,60 @@
 
 ## 📖 Project Overview
 
-The **Office Power Monitor** is an enterprise-grade IoT platform built to track, analyze, and alert on real-time electricity consumption across multiple office rooms. Designed with a **single source of truth**, this monorepo features a live simulator, a highly scalable Node.js/Socket.IO backend, a premium React glassmorphism dashboard, and a fully integrated Discord Bot for chat-ops.
+The **Office Power Monitor** is an enterprise-grade IoT platform built to track,
+analyze, and alert on real-time electricity consumption across multiple office
+rooms. Designed with a **single source of truth**, this monorepo features a live
+simulator, a highly scalable Node.js/Socket.IO backend, a premium React
+glassmorphism dashboard, and a fully integrated Discord Bot for chat-ops.
 
-The default configuration simulates an office with **3 rooms** (Drawing Room, Work Room 1, Work Room 2) and **15 devices** total — **2 fans (60 W) and 3 lights (15 W) per room** as specified in the challenge brief. Max per-room draw is 165 W (max office draw 495 W). The internal physics engine dynamically simulates power draw, respects working hours (9 AM – 5 PM), calculates instantaneous W and cumulative kWh, and automatically raises incident alerts for anomalous usage.
+The default configuration simulates an office with **3 rooms** (Drawing Room,
+Work Room 1, Work Room 2) and **15 devices** total — **2 fans (60 W) and 3
+lights (15 W) per room** as specified in the challenge brief. Max per-room draw
+is 165 W (max office draw 495 W). The internal physics engine dynamically
+simulates power draw, respects working hours (9 AM – 5 PM), calculates
+instantaneous W and cumulative kWh, and automatically raises incident alerts for
+anomalous usage.
 
 ---
 
 ## ✨ Features
 
-- 🔋 **Live Telemetry:** Zero-polling, instantly broadcasted state synchronization using Socket.IO.
-- 🏢 **Interactive Floor Plan & Device Management:** A beautifully animated SVG office layout where fans spin and lights glow. From the dashboard, users can click device chips to **remotely toggle** hardware on and off in real-time.
-- 🚨 **Smart Alert Engine:** Automatically detects and escalates anomalies (e.g., lights left ON after hours, rooms ON continuously for >2 hours).
-- 🧠 **AI Root Cause Analysis:** Integrates with the **Hugging Face Inference API** to automatically generate enterprise-grade, professional root-cause analyses for power anomalies.
-- 📉 **Waste Optimizer & Eco-Mode:** Utilizes a custom Logistic Regression prediction engine to identify empty rooms. If devices are left on in an unoccupied room, the system flags the wasted BDT cost and, after a 5-minute grace period, **automatically shuts down** the offending devices via Eco-Mode.
-- 🧠 **Incident Aggregator:** Groups related hardware alerts into deduplicated incidents to prevent dashboard spam.
-- 🤖 **Discord Chat-Ops:** Full command suite (`!status`, `!room`, `!usage`, `!alerts`) wrapped in rich embeds for chat-based monitoring.
-- 🔌 **Enterprise Architecture:** Strict separation of concerns (MVC), Dependency Injection, Class-based Service Layers, and Swagger-ready REST APIs.
+- 🔋 **Live Telemetry:** Zero-polling, instantly broadcasted state
+  synchronization using Socket.IO.
+- 🏢 **Interactive Floor Plan & Device Management:** A beautifully animated SVG
+  office layout where fans spin and lights glow. From the dashboard, users can
+  click device chips to **remotely toggle** hardware on and off in real-time.
+- 🚨 **Smart Alert Engine:** Automatically detects and escalates anomalies
+  (e.g., lights left ON after hours, rooms ON continuously for >2 hours).
+- 🧠 **AI Root Cause Analysis:** Integrates with the **Hugging Face Inference
+  API** to automatically generate enterprise-grade, professional root-cause
+  analyses for power anomalies.
+- 📉 **Waste Optimizer & Eco-Mode:** Utilizes a custom Logistic Regression
+  prediction engine to identify empty rooms. If devices are left on in an
+  unoccupied room, the system flags the wasted BDT cost and, after a 5-minute
+  grace period, **automatically shuts down** the offending devices via Eco-Mode.
+- 🧠 **Incident Aggregator:** Groups related hardware alerts into deduplicated
+  incidents to prevent dashboard spam.
+- 🤖 **Discord Chat-Ops:** Full command suite (`!status`, `!room`, `!usage`,
+  `!alerts`) wrapped in rich embeds for chat-based monitoring.
+- 🔌 **Enterprise Architecture:** Strict separation of concerns (MVC),
+  Dependency Injection, Class-based Service Layers, and Swagger-ready REST APIs.
 
 ---
 
 ## 📸 Screenshots
 
-> *(Hackathon Note: Replace these placeholders with actual screenshots prior to presentation)*
+> _(Hackathon Note: Replace these placeholders with actual screenshots prior to
+> presentation)_
 
-| Main Dashboard | Interactive Floor Plan | Discord Bot (Embeds & Alerts) |
-| :---: | :---: | :---: |
+|                                            Main Dashboard                                            |                                          Interactive Floor Plan                                           |                                        Discord Bot (Embeds & Alerts)                                        |
+| :--------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: |
 | <img src="https://via.placeholder.com/400x250.png?text=Dashboard+UI" alt="Dashboard UI" width="400"> | <img src="https://via.placeholder.com/400x250.png?text=Floor+Plan" alt="Interactive SVG Map" width="400"> | <img src="https://via.placeholder.com/400x250.png?text=Discord+Bot" alt="Discord Integrations" width="400"> |
 
 ### 🎬 End-to-End Demo (Shared Backend Proof)
 
-A single GIF that proves both interfaces read from **one** live backend: toggle a
-device from the dashboard → the tile updates in real time → the Alert Engine
+A single GIF that proves both interfaces read from **one** live backend: toggle
+a device from the dashboard → the tile updates in real time → the Alert Engine
 fires → the Discord bot posts an embed in the channel — all within seconds.
 
 <p align="center">
@@ -71,8 +95,8 @@ fires → the Discord bot posts an embed in the channel — all within seconds.
    configured Discord channel — both driven by the same Socket.IO stream from
    `backend/src/sockets/socketBroadcaster.js`.
 6. Record with [ScreenToGif](https://www.screentogif.com/) (Windows) or
-   [Peek](https://github.com/phw/peek) (Linux); export at ≤ 10 fps, ≤ 8 MB,
-   save to `docs/media/demo-end-to-end.gif`.
+   [Peek](https://github.com/phw/peek) (Linux); export at ≤ 10 fps, ≤ 8 MB, save
+   to `docs/media/demo-end-to-end.gif`.
 
 </details>
 
@@ -80,29 +104,32 @@ fires → the Discord bot posts an embed in the channel — all within seconds.
 
 ## 🏗️ Architecture & System Diagram
 
-The system operates on an event-driven loop. The underlying stores are the single source of truth. As hardware state mutates, events bubble up through the Service Layer to the REST API, Alert Engine, Eco-Mode Engine, and SocketBroadcaster simultaneously.
+The system operates on an event-driven loop. The underlying stores are the
+single source of truth. As hardware state mutates, events bubble up through the
+Service Layer to the REST API, Alert Engine, Eco-Mode Engine, and
+SocketBroadcaster simultaneously.
 
 ```mermaid
 graph TD
     %% Hardware/Sim Layer
     Sim[Simulator Engine / Physical ESP32 Node] -->|Updates State| Store[(In-Memory Device Store)]
-    
+
     %% Engine Layer
     Store -->|devices:changed| AlertEngine[Alert Engine]
     Store -->|devices:changed| PredictionEngine[Prediction Engine]
     PredictionEngine -->|occupancy:changed| EcoMode[Eco-Mode Engine]
     AlertEngine -->|alerts:changed| Aggregator[Incident Aggregator]
-    
+
     %% Service Layer
     Store --> Service[Service Layer Facade]
     AlertEngine --> Service
     Aggregator --> Service
-    
+
     %% API Boundaries
     Service --> REST[Express REST API]
     Service --> Broadcaster[Socket.IO Broadcaster]
     EcoMode -->|eco:action| Broadcaster
-    
+
     %% Clients
     Broadcaster -->|WebSocket| Web[React Dashboard]
     Broadcaster -->|WebSocket| BotAlerts[Discord Auto-Alerts]
@@ -113,13 +140,13 @@ graph TD
 
 ## 🛠️ Tech Stack
 
-| Layer | Technologies |
-| :--- | :--- |
-| **Backend** | Node.js, Express, Socket.IO, Winston Logger, Swagger-JSDoc |
-| **Frontend** | React 18, Vite 5, Tailwind CSS, Framer Motion, React-Router-DOM |
-| **AI Integration** | Hugging Face API (`meta-llama/Llama-3.2-3B-Instruct`) |
-| **Discord Bot** | Discord.js v14, Socket.IO-Client |
-| **Hardware Node** | ESP32, ACS712 Current Sensor, Opto-isolated Relays (Simulated) |
+| Layer              | Technologies                                                    |
+| :----------------- | :-------------------------------------------------------------- |
+| **Backend**        | Node.js, Express, Socket.IO, Winston Logger, Swagger-JSDoc      |
+| **Frontend**       | React 18, Vite 5, Tailwind CSS, Framer Motion, React-Router-DOM |
+| **AI Integration** | Hugging Face API (`meta-llama/Llama-3.2-3B-Instruct`)           |
+| **Discord Bot**    | Discord.js v14, Socket.IO-Client                                |
+| **Hardware Node**  | ESP32, ACS712 Current Sensor, Opto-isolated Relays (Simulated)  |
 
 ---
 
@@ -146,31 +173,42 @@ office-power-monitor/
 
 ## 🚀 Setup & Installation (Docker)
 
-The fastest and most reliable way to run the entire Office Power Monitor stack (Backend, Frontend, and Bot) is using **Docker Compose**.
+The fastest and most reliable way to run the entire Office Power Monitor stack
+(Backend, Frontend, and Bot) is using **Docker Compose**.
 
 ### Prerequisites
+
 - [Docker](https://docs.docker.com/get-docker/) installed and running.
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
 ### 1. Configuration
+
 First, copy the global environment template:
+
 ```bash
 cp .env.example .env
 ```
-Open the new `.env` file and fill in your `DISCORD_TOKEN`, `ALERT_CHANNEL_IDS`, and `OPENAI_API_KEY` (if using).
+
+Open the new `.env` file and fill in your `DISCORD_TOKEN`, `ALERT_CHANNEL_IDS`,
+and `OPENAI_API_KEY` (if using).
 
 ### 2. Build and Run
+
 Start the entire stack in detached mode:
+
 ```bash
 docker compose up --build -d
 ```
-That's it! The services will automatically wire themselves together over a private Docker network.
+
+That's it! The services will automatically wire themselves together over a
+private Docker network.
 
 - **Frontend Dashboard:** `http://localhost:5173`
 - **Backend API:** `http://localhost:4000`
 - **Discord Bot:** Runs silently in the background.
 
 ### 3. Useful Docker Commands
+
 - **View Live Logs:** `docker compose logs -f`
 - **Stop the Stack:** `docker compose down`
 - **Rebuild after code changes:** `docker compose up --build -d`
@@ -179,7 +217,8 @@ That's it! The services will automatically wire themselves together over a priva
 
 ## 🚀 Setup & Installation (Manual Node.js)
 
-If you prefer to run the services individually without Docker, you can start them manually. Ensure you have **Node.js 20+** installed.
+If you prefer to run the services individually without Docker, you can start
+them manually. Ensure you have **Node.js 20+** installed.
 
 1. **Backend:** `cd backend && npm install && npm start` (Port 4000)
 2. **Frontend:** `cd frontend && npm install && npm run dev` (Port 5173)
@@ -189,22 +228,28 @@ If you prefer to run the services individually without Docker, you can start the
 
 ## 🔌 API Documentation
 
-The backend adheres to a strict RESTful envelope: `{ success: boolean, data: { ... }, error?: { ... } }`.
+The backend adheres to a strict RESTful envelope:
+`{ success: boolean, data: { ... }, error?: { ... } }`.
 
 - **`GET /api/devices`** - Array of raw device telemetries.
 - **`GET /api/rooms`** - Aggregated summary of power consumption per room.
-- **`GET /api/usage`** - High-level metrics, total Watts, and estimated daily kWh.
+- **`GET /api/usage`** - High-level metrics, total Watts, and estimated daily
+  kWh.
 - **`GET /api/alerts?status=active`** - Fetch system warnings and errors.
 - **`GET /api/incidents`** - Fetch deduplicated incident tickets.
 
-*(Full API spec can be found internally via Swagger comments on the router controllers).*
+_(Full API spec can be found internally via Swagger comments on the router
+controllers)._
 
 ---
 
 ## 🔧 Hardware Documentation
 
-Want to transition from the software simulator to real-world edge devices? 
-We have fully mapped out the **ESP32 + ACS712 + Relay Module** circuitry required to build a physical room node. Because the SaaS architecture is entirely decoupled and event-driven, swapping the virtual simulator for physical HTTP/MQTT payloads requires zero downstream logic changes.
+Want to transition from the software simulator to real-world edge devices? We
+have fully mapped out the **ESP32 + ACS712 + Relay Module** circuitry required
+to build a physical room node. Because the SaaS architecture is entirely
+decoupled and event-driven, swapping the virtual simulator for physical
+HTTP/MQTT payloads requires zero downstream logic changes.
 
 👉 [View the complete Hardware Design Guide here](hardware/CIRCUIT_DESIGN.md).
 
@@ -212,12 +257,18 @@ We have fully mapped out the **ESP32 + ACS712 + Relay Module** circuitry require
 
 ## 🔮 Future Improvements
 
-- [ ] **Historical Database:** Migrate from the in-memory Singleton store to PostgreSQL/TimescaleDB for permanent time-series retention.
-- [ ] **User Authentication:** Add JWT-based Auth to the REST API and a login portal to the React frontend.
-- [ ] **MQTT Bridge:** Implement a dedicated MQTT broker (`Mosquitto`) to support direct bidirectional communication with thousands of physical ESP32 nodes simultaneously.
-- [ ] **Hardware Prototyping:** Transition from Wokwi simulation to physical PCB manufacturing for the room nodes.
+- [ ] **Historical Database:** Migrate from the in-memory Singleton store to
+      PostgreSQL/TimescaleDB for permanent time-series retention.
+- [ ] **User Authentication:** Add JWT-based Auth to the REST API and a login
+      portal to the React frontend.
+- [ ] **MQTT Bridge:** Implement a dedicated MQTT broker (`Mosquitto`) to
+      support direct bidirectional communication with thousands of physical
+      ESP32 nodes simultaneously.
+- [ ] **Hardware Prototyping:** Transition from Wokwi simulation to physical PCB
+      manufacturing for the room nodes.
 
 ---
+
 <div align="center">
   <i>Built with ❤️ for the Hackathon</i>
 </div>
