@@ -90,7 +90,6 @@ function DeviceChip({ device, index = 0 }) {
 function Sparkline({ samples }) {
   if (!samples || samples.length < 2) {return null;}
   const maxW = Math.max(...samples.map((s) => s.w), 10);
-  const minW = 0;
   
   const width = 72;
   const height = 24;
