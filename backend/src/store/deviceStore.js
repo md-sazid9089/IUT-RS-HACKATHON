@@ -144,7 +144,7 @@ class DeviceStore extends EventEmitter {
    *                                   (useful in tests). Defaults to Date.now().
    * @returns {DeviceChange|null}      null when no change occurred.
    */
-  updateDevice(id, nextStatus, nowMs = Date.now()) {
+  updateDevice(id, nextStatus, nowMs = Date.now(), silent = false) {
     const device = this._byId.get(id);
     if (!device) {
       return null;
@@ -165,7 +165,9 @@ class DeviceStore extends EventEmitter {
       nextStatus,
       timestamp: nowMs
     };
-    this.emit('device:changed', change);
+    if (!silent) {
+      this.emit('device:changed', change);
+    }
     return change;
   }
 
@@ -188,7 +190,7 @@ class DeviceStore extends EventEmitter {
     /** @type {DeviceChange[]} */
     const changes = [];
     for (const u of updates) {
-      const change = this.updateDevice(u.id, u.status, nowMs);
+      const change = this.updateDevice(u.id, u.status, nowMs, true);
       if (change) {
         changes.push(change);
       }

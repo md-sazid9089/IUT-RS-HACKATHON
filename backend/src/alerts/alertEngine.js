@@ -173,7 +173,7 @@ class AlertEngine {
           const stddev = Math.sqrt(variance);
 
           // DEBUG LOG
-          console.log(`[DEBUG] Room ${room.id} anomaly check: baseline_len=${baseline.length} mean=${mean} stddev=${stddev} latest=${latest}`);
+          logger.debug(`Room ${room.id} anomaly check: baseline_len=${baseline.length} mean=${mean} stddev=${stddev} latest=${latest}`);
 
           // Detect a spike: current is > mean + 2*stddev
           // Also require a minimum jump (e.g. 45W) so turning on one light doesn't trigger it when mean is 0.
