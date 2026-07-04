@@ -13,7 +13,7 @@ import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
  *
  * @param {{devices: any[], rooms: any[]}} props
  */
-export default function OfficeLayout({ devices = [], rooms = [], alerts = [] }) {
+export default function OfficeLayout({ devices = [], rooms = [], alerts = [], isSimMode = false, onDeviceToggle }) {
   const [hoverId, setHoverId] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const mouseX = useMotionValue(0);
@@ -51,6 +51,14 @@ export default function OfficeLayout({ devices = [], rooms = [], alerts = [] }) 
   const hoverDevice = hoverId ? byId.get(hoverId) : null;
   const selectedDevice = selectedId ? byId.get(selectedId) : null;
 
+  const handleDeviceClick = (id) => {
+    if (isSimMode && onDeviceToggle) {
+      onDeviceToggle(id);
+    } else {
+      setSelectedId(id);
+    }
+  };
+
   return (
     <section className="glass relative p-5" onMouseMove={handleMouseMove}>
       <div className="mb-4 flex items-baseline justify-between">
@@ -60,7 +68,13 @@ export default function OfficeLayout({ devices = [], rooms = [], alerts = [] }) 
         <div className="text-xs text-slate-400">Hover for info · Click for details</div>
       </div>
 
-      <div className="relative w-full overflow-hidden rounded-xl border border-white/10 bg-ink-900/60 shadow-inner">
+      <div className={`relative w-full overflow-hidden rounded-xl border ${isSimMode ? 'border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'border-white/10'} bg-ink-900/60 shadow-inner`}>
+        {isSimMode && (
+          <div className="absolute top-4 right-4 z-10 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
+            SIMULATION MODE
+          </div>
+        )}
         <svg
           viewBox="0 0 860 520"
           className="block h-auto w-full select-none"
@@ -250,7 +264,7 @@ export default function OfficeLayout({ devices = [], rooms = [], alerts = [] }) 
                       className="cursor-pointer"
                       onMouseEnter={() => setHoverId(id)}
                       onMouseLeave={() => setHoverId(null)}
-                      onClick={() => setSelectedId(id)}
+                      onClick={() => handleDeviceClick(id)}
                     >
                       {/* Large ambient bloom */}
                       {on && (
@@ -337,7 +351,7 @@ export default function OfficeLayout({ devices = [], rooms = [], alerts = [] }) 
                       className="cursor-pointer"
                       onMouseEnter={() => setHoverId(id)}
                       onMouseLeave={() => setHoverId(null)}
-                      onClick={() => setSelectedId(id)}
+                      onClick={() => handleDeviceClick(id)}
                     >
                       {/* Outer glow ring when on */}
                       {on && (

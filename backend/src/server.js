@@ -75,7 +75,8 @@ function bootstrap() {
     alertService,
     incidentService,
     demoService,
-    predictionEngine
+    predictionEngine,
+    roomSampleBuffer
   });
 
   const ecoModeEngine = new EcoModeEngine({ predictionEngine, deviceService, roomService });
